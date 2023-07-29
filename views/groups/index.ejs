@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Groups List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .controls{
+            display: flex;
+        }
+
+        .controls > *{
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<%- include('../components/navbar') %>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <h1>Groups List</h1>
+        </div>
+        <div class="col text-right">
+            <a href="/groups/create" class="btn btn-primary">Create New Group</a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered table-striped text-center table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Notice</th>
+                    <th>Text</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% groups.forEach(group => { %>
+                    <tr>
+                        <td><%= group.name %></td>
+                        <td><%= group.notice %></td>
+                        <td><%= group.text %></td>
+                        <td class="controls">
+                            <a href="/groups/<%= group._id %>/edit" class="btn btn-primary btn-sm mr-2">Edit</a>
+                            <form action="/groups/<%= group._id %>?_method=DELETE" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm w-100">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .custom-pdf-container {
+            padding-top: 20px;
+        }
+
+        .custom-pdf-table {
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .custom-pdf-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .custom-pdf-table td {
+            vertical-align: middle;
+        }
+
+        .custom-pdf-table td a {
+            margin-right: 5px;
+        }
+
+        .custom-pdf-controls > :first-child {
+            flex-grow: 1;
+        }
+
+        .custom-pdf-controls > :last-child {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<%- include('../components/navbar') %>
+<div class="container custom-pdf-container">
+    <div class="table-responsive custom-pdf-table">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Link</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% pdfs.forEach(pdf => { %>
+                <tr>
+                    <td><%= pdf.name %></td>
+                    <td><a href="/pdfs/<%= pdf._id %>">View PDF</a></td>
+                    <td class="d-flex custom-pdf-controls">
+                        <a href="/pdfs/<%= pdf._id %>/edit" class="btn btn-primary btn-sm">Edit</a>
+                        <form action="/pdfs/<%= pdf._id %>?_method=DELETE" method="POST">
+                            <button type="submit" class="btn btn-danger btn-sm w-100">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

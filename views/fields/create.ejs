@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create New Form Field</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<%- include('../components/navbar') %>
+
+<div class="container">
+    <form id="createForm">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="answerDataType">Answer Data Type</label>
+            <select class="form-control" id="answerDataType" name="answerDataType" required>
+                <option value="text">Text</option>
+                <option value="number">Number</option>
+                <option value="yes_no">Yes-No</option>
+                <option value="file">File</option>
+                <option value="files">Files</option>
+                <option value="date">Date</option>
+                <option value="image">Image</option>
+                <option value="images">Images</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="group">Group</label>
+            <select class="form-control" id="group" name="group">
+                <% groups.forEach(group => { %>
+                    <option value="<%= group._id %>"><%= group.name %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="form">Form</label>
+            <select class="form-control" id="form" name="form">
+                <option value="First">First</option>
+                <option value="Second">Second</option>
+            </select>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="hasRequiredDescription" onchange="toggleRequiredDescription()" name="hasRequiredDescription">
+            <label class="form-check-label" for="hasRequiredDescription">Has Required Description</label>
+        </div>
+        <div class="form-group">
+            <label for="requiredDescription">Required Description</label>
+            <input type="text" class="form-control" id="requiredDescription" name="requiredDescription" disabled>
+        </div>
+        <script>
+            // Function to enable/disable the required description based on checkbox state
+            function toggleRequiredDescription() {
+                const requiredDescriptionInput = document.getElementById("requiredDescription");
+                const checkbox = document.getElementById("hasRequiredDescription");
+                requiredDescriptionInput.disabled = !checkbox.checked;
+            }
+
+            // Function to handle form submission using Fetch API
+            document.getElementById("createForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+                let title = document.querySelector('#title')
+                let answerDataType = document.querySelector('#answerDataType')
+                let group = document.querySelector('#group')
+                let form = document.querySelector('#form')
+                let hasRequiredDescription = document.querySelector('#hasRequiredDescription')
+                let requiredDescription = document.querySelector('#requiredDescription')
+
+                const formData = new FormData(event.target);
+                console.log(formData)
+                try {
+                    await fetch("/api/formFields", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            title: title.value,
+                            group: group.value,
+                            form: form.value,
+                            hasRequiredDescription: hasRequiredDescription.checked,
+                            requiredDescription: hasRequiredDescription.checked ? requiredDescription.value : undefined,
+                            answerDataType: answerDataType.value
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        }
+                    })
+
+                    // location.href = 'http://localhost:3000/fields'
+
+                } catch (error) {
+                    console.log('erorr')
+                }
+            });
+        </script>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+</div>
+</body>
+</html>
