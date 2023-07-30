@@ -20,7 +20,10 @@
 <body>
 <%- include('../components/navbar') %>
 <div class="container">
-    <h1>User List</h1>
+    <div class="d-flex justify-content-between">
+        <h1>User List</h1>
+        <a href="/users/create" class="btn btn-primary"> Create User</a>
+    </div>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
@@ -37,7 +40,7 @@
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.phone %></td>
-                <td><%= user.createdAt %></td>
+                <td><%= new Date(+user.createdAt).toLocaleString()%></td>
                 <td class="controls">
                     <a href="/users/<%= user._id %>/edit" class="btn btn-primary btn-sm me-1">Edit</a>
                     <form action="/users/<%= user._id %>?_method=DELETE" method="POST" >

@@ -12,7 +12,11 @@ const PDFSchema = new mongoose.Schema({
     link:{
         type: String,
         required: true
-    }
+    },
+    createdAt: {
+        type: String,
+        default: Date.now().toString()
+    },
 })
 
 const PDFModel = mongoose.model('PDF', PDFSchema)

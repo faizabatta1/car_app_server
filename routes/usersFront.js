@@ -14,4 +14,19 @@ router.get('/users',async  (req,res) =>{
     }
 })
 
+router.get('/users/create', (req,res) =>{
+    return res.status(200).render('users/create')
+})
+
+router.get('/users/:id/edit', async (req,res) =>{
+    try{
+        let user = await User.findOne({ _id: req.params.id })
+        return res.status(200).render('users/update',{
+            user: user
+        })
+    }catch (error){
+
+    }
+})
+
 module.exports = router

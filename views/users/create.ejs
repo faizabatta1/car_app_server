@@ -8,7 +8,8 @@
 <%- include('../components/navbar') %>
 <div class="container">
     <h1>Create New User</h1>
-    <form action="/users" method="POST">
+    <div id="alertBox" class="alert alert-danger" style="display: none;"></div>
+    <form id="createUserForm">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" name="name" required>
@@ -25,8 +26,43 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Create User</button>
+        <button type="button" class="btn btn-primary" onclick="createUser()">Create User</button>
     </form>
 </div>
+<script>
+    function createUser() {
+        let name = document.querySelector('#name')
+        let email = document.querySelector('#email')
+        let phone = document.querySelector('#phone')
+        let password = document.querySelector('#password')
+
+        fetch('/api/users', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: name.value,
+                email: email.value,
+                phone: phone.value,
+                password: password.value
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/users';
+                } else {
+                    response.text().then(data => {
+                        const alertBox = document.getElementById('alertBox');
+                        alertBox.innerText = data;
+                        alertBox.style.display = 'block';
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 </body>
 </html>
