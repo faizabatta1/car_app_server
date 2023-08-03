@@ -19,7 +19,8 @@ const groupRouter = require('./routes/groupRoute')
 const fieldRouter = require('./routes/fieldRoute')
 
 const userRouter = require('./routes/usersRouter')
-app.use('/api',driverRouter,groupRouter,fieldRouter,userRouter)
+const pdfRouter = require('./routes/pdfRoute')
+app.use('/api',driverRouter,groupRouter,fieldRouter,userRouter,pdfRouter)
 
 const driverFront = require('./routes/driverFront')
 const groupFront = require('./routes/groupFront')

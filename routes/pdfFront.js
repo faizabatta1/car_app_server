@@ -17,7 +17,10 @@ router.post('/pdfs', async (req, res) => {
 // READ - Get all PDFs
 router.get('/pdfs', async (req, res) => {
     try {
-        const pdfs = await PDF.find({});
+        const pdfs = await PDF.find({}).populate({
+            path:'userId',
+            ref:'User'
+        });
         return res.status(200).render('pdf/pdf_list', { pdfs });
     } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });

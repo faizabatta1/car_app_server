@@ -51,6 +51,7 @@ router.get('/formFields/:id', async (req, res) => {
 
 router.put('/formFields/:id', async (req, res) => {
     try {
+        console.log(req.body)
         const formField = await FormField.findByIdAndUpdate(req.params.id, req.body, { new: true });
         return res.status(200).json(formField);
     } catch (error) {

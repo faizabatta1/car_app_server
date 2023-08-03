@@ -8,7 +8,6 @@
             background-color: #f5f5f5;
         }
 
-
         .table {
             border-radius: 5px;
             overflow: hidden;
@@ -65,6 +64,16 @@
             border-color: #1e7e34;
         }
 
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -80,8 +89,13 @@
     </div>
     <hr>
 
+    <!-- Search Filter -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search by title...">
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-bordered table-striped mt-3">
+        <table class="table table-bordered table-striped mt-3" id="formFieldsTable">
             <thead>
             <tr>
                 <th>Title</th>
@@ -99,7 +113,7 @@
                     <td><%= formField.hasRequiredDescription ? 'Yes' : 'No' %></td>
                     <td><%= formField.requiredDescription %></td>
                     <td>
-                        <a href="/api/formFields/<%= formField._id %>/edit" class="btn btn-info btn-sm btn-edit">Edit</a>
+                        <a href="/fields/<%= formField._id %>/update" class="btn btn-info btn-sm btn-edit">Edit</a>
                         <form action="/api/formFields/<%= formField._id %>?_method=DELETE" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
@@ -110,5 +124,25 @@
         </table>
     </div>
 </div>
+
+<script>
+    // JavaScript for Search Filter
+    const searchInput = document.getElementById('searchInput');
+    const formFieldsTable = document.getElementById('formFieldsTable');
+    const tableRows = formFieldsTable.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < tableRows.length; i++) {
+            const title = tableRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
+            if (title.includes(filter)) {
+                tableRows[i].style.display = '';
+            } else {
+                tableRows[i].style.display = 'none';
+            }
+        }
+    });
+</script>
 </body>
 </html>

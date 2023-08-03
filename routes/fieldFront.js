@@ -24,4 +24,16 @@ router.get('/fields/create',async (req,res) =>{
     })
 })
 
+const Field = require('../models/FormField')
+router.get('/fields/:id/update', async (req,res) => {
+    try{
+        let formField = await Field.findOne({_id:req.params.id})
+        return res.status(200).render('fields/edit',{
+            formField
+        })
+    }catch (error){
+        return res.status(500).send(error.message)
+    }
+})
+
 module.exports = router

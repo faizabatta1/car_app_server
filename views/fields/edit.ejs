@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<%- include('../components/navbar') %>
 <div class="container">
-    <h1>Edit Form Field</h1>
-    <form action="/api/formFields/<%= formField._id %>?_method=PUT" method="POST">
+    <form id="editFormFieldForm">
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="title" value="<%= formField.title %>" required>
@@ -15,9 +15,14 @@
         <div class="form-group">
             <label for="answerDataType">Answer Data Type</label>
             <select class="form-control" id="answerDataType" name="answerDataType" required>
-                <option value="text" <%= formField.answerDataType === 'text' ? 'selected' : '' %>>Text</option>
-                <option value="yes_no" <%= formField.answerDataType === 'yes_no' ? 'selected' : '' %>>Yes-No</option>
-                <option value="file" <%= formField.answerDataType === 'file' ? 'selected' : '' %>>Files</option>
+                <option value="text">Text</option>
+                <option value="number">Number</option>
+                <option value="yes_no">Yes-No</option>
+                <option value="file">File</option>
+                <option value="files">Files</option>
+                <option value="date">Date</option>
+                <option value="image">Image</option>
+                <option value="images">Images</option>
             </select>
         </div>
         <div class="form-group form-check">
@@ -31,5 +36,43 @@
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
+
+<script>
+    const form = document.getElementById('editFormFieldForm')
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const title = document.getElementById('title');
+        const answerDataType = document.getElementById('answerDataType');
+        const hasRequiredDescription = document.getElementById('hasRequiredDescription');
+        const requiredDescription = document.getElementById('requiredDescription');
+        const formFieldId = '<%= formField._id %>';
+
+        fetch(`/api/formFields/${formFieldId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                title: title.value,
+                answerDataType: answerDataType.value,
+                hasRequiredDescription: hasRequiredDescription.checked,
+                requiredDescription: requiredDescription.value
+            })
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    // Handle success response
+                    console.log('Form field updated successfully');
+                } else {
+                    // Handle error response
+                    console.error('Failed to update form field');
+                }
+            })
+            .catch(error => {
+                // Handle fetch error
+                console.error('Error occurred during fetch:', error);
+            });
+    });
+</script>
 </body>
 </html>

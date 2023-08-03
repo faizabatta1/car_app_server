@@ -31,10 +31,10 @@ exports.deleteAllUsers = async (req, res) =>{
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, accountId, password, phone } = req.body;
     console.log(req.body);
 
-    const existingUser = await User.findOne({ email: email });
+    const existingUser = await User.findOne({ accountId: accountId });
 
     if (existingUser) {
       return res.status(400).send('Email already exists');
@@ -48,7 +48,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name: name,
-      email: email,
+      accountId: accountId,
       password: hashedPassword,
       phone:phone
     });
@@ -66,10 +66,10 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { accountId, password } = req.body;
     console.log(req.body)
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ accountId: accountId });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -79,16 +79,20 @@ exports.login = async (req, res) => {
 
     if (isMatch) {
       const token = jwt.sign(
-        { userId: user._id, email: user.email, role: 'user' },
+        { userId: user._id, accountId: user.accountId, role: 'user' },
         'your-secret-key',
         { expiresIn: '30d' }
       );
 
-      return res.status(200).send(token);
+      return res.status(200).json({
+        token: token,
+        user: user.name
+      });
     } else {
       return res.status(401).send('Invalid password');
     }
   } catch (error) {
+    console.log(error.message)
     return res.status(500).send('Internal server error');
   }
 };
@@ -128,20 +132,21 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  console.log(req.body)
   try {
     const userId = req.params.id;
-    const { name, email } = req.body;
+    const { name, accountId, phone, password } = req.body;
 
-    const existingUser = await User.findOne({ email: email });
+    const existingUser = await User.findOne({ accountId: accountId });
 
     if (existingUser && existingUser._id.toString() !== userId) {
       return res.status(400).json({ error: 'Email already exists with another user' });
     }
-
+    const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name: name, email: email },
-      { new: true }
+      { name: name, accountId: accountId, phone: phone, password: hashedPassword },
+      { $new: true }
     );
 
     if (updatedUser) {

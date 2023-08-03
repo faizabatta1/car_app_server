@@ -8,14 +8,14 @@
 <%- include('../components/navbar') %>
 <div class="container">
     <h1>Edit User</h1>
-    <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+    <form id="editUserForm">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
         </div>
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+            <label for="accountId">accountId</label>
+            <input type="text" class="form-control" id="accountId" name="accountId" value="<%= user.accountId %>" required>
         </div>
         <div class="form-group">
             <label for="phone">Phone</label>
@@ -25,8 +25,47 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Update User</button>
+        <button type="button" class="btn btn-primary" onclick="updateUser()">Update User</button>
     </form>
 </div>
+
+<script>
+    function updateUser() {
+        const name = document.getElementById("name");
+        const accountId = document.getElementById("accountId");
+        const phone = document.getElementById("phone");
+        const password = document.getElementById("password");
+
+        const userId = "<%= user._id %>";
+
+        fetch(`/api/users/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                name: name.value,
+                accountId: accountId.value,
+                phone: phone.value,
+                password: password.value,
+            }),
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    // Handle success
+                    alert("User updated successfully!");
+                    location.href = '/users'
+                } else {
+                    // Handle error
+                    alert("Failed to update user.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while updating user.");
+            });
+    }
+</script>
+
 </body>
 </html>
