@@ -7,7 +7,7 @@ const PDF = require('../models/PDF')
 const jwt = require('jsonwebtoken')
 
 const createNewDriver = async (req,res) =>{
-    console.log(req.headers)
+    console.log(req.body)
     try{
         let values = Object.values(req.body).map(e => JSON.parse(e))
 
