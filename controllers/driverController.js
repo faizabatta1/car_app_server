@@ -8,71 +8,71 @@ const jwt = require('jsonwebtoken')
 
 const createNewDriver = async (req,res) =>{
     console.log(req.body)
-    try{
+    try {
         let values = Object.values(req.body).map(e => JSON.parse(e))
 
         const groupedData = values.reduce((acc, obj) => {
             if (!acc[obj.form]) {
-                acc[obj.form] = {};
+                acc[obj.form] = [];
             }
 
-            if (!acc[obj.form][obj.group]) {
-                acc[obj.form][obj.group] = [];
-            }
-
-            acc[obj.form][obj.group].push(obj);
+            acc[obj.form].push(obj);
             return acc;
         }, {});
 
         console.log(groupedData);
 
-
         // Create a new PDF document
         const doc = new PDFDocument();
-        doc.font('Helvetica-Bold').fontSize(24).text('Daily car schedule', { align: 'center' });
+        doc.font('Helvetica-Bold').fontSize(12).text('Daily car schedule', { align: 'center' });
 
-        for(let rf1 of Object.keys(groupedData['First'])){
-            let ggr = await Group.findOne({ _id:rf1 })
-                if (ggr.name == 'No Group'){
-                    for(rfg1 of groupedData['First'][rf1]){
-                        doc.fontSize(16).text(`${rfg1.title}   `, { continued: true,  });
-                        doc.fontSize(14).text(`${rfg1.value}`, { underline: true });
-                        doc.moveDown();
-                    }
-                }
+        // Add table header
+        const tableHeader = ['Checked', 'Text', 'None', 'Question'];
+        const firstColumnWidth = 300; // Width for the first column
+        const otherColumnsWidth = 60; // Width for other columns
+
+        doc.font('Helvetica-Bold');
+        for (let i = 0; i < tableHeader.length; i++) {
+            const columnWidth = i === 0 ? firstColumnWidth : otherColumnsWidth;
+            doc.text(tableHeader[i], i * columnWidth + 50, 100);
         }
 
-        for(let rf2 of Object.keys(groupedData['First'])){
-            let ggr = await Group.findOne({ _id:rf2 })
-
-            if(ggr.name != "No Group"){
-                doc.fontSize(20).text(ggr.name + ':')
-                for(rfg2 of groupedData['First'][rf2]){
-                    doc.fontSize(16).text("              " + rfg2.title + "   ",{ continued:true })
-                    doc.fontSize(16).text(rfg2.value, { underline: true })
-                    doc.moveDown()
-                }
+        doc.font('Helvetica');
+        let row = 0;
+        for (let sub of groupedData['First']) {
+            for (let col = 0; col < tableHeader.length; col++) {
+                const cellValue = [sub.value, 'Text', 'None',sub.title][col];
+                const columnWidth = col === 0 ? firstColumnWidth : otherColumnsWidth;
+                doc.text(cellValue, col * columnWidth + 50, (row + 1) * 30 + 100);
             }
+
+            row++;
         }
 
         doc.addPage()
 
-        // for(let rf1 of groupedData['Second']['null']){
-        //     doc.fontSize(16).text(`${rf1.title}   `, { continued: true });
-        //     doc.fontSize(14).text(`${rf1.value}`, { underline: true });
-        //     doc.moveDown();
-        // }
-        //
-        // for(let rf2 of Object.keys(groupedData['Second'])){
-        //     if(rf2 != "null"){
-        //         doc.fontSize(20).text(rf2 + ':')
-        //         for(rfg2 of groupedData['Second'][rf2]){
-        //             doc.fontSize(16).text(rfg2.title + "   ",{ continued:true })
-        //             doc.fontSize(16).text(rfg2.value, { underline: true })
-        //             doc.moveDown()
-        //         }
-        //     }
-        // }
+        // Add table header
+        const tableHeaderX = ['Day', 'Night', 'Weekend', 'Mistakes'];
+        const firstColumnWidthX = 300; // Width for the first column
+        const otherColumnsWidthX = 60; // Width for other columns
+
+        doc.font('Helvetica-Bold');
+        for (let i = 0; i < tableHeaderX.length; i++) {
+            const columnWidth = i === 0 ? firstColumnWidthX : otherColumnsWidthX;
+            doc.text(tableHeaderX[i], i * columnWidth + 50, 100);
+        }
+
+        doc.font('Helvetica');
+        let rowX = 0;
+        for (let sub of groupedData['Second']) {
+            for (let col = 0; col < tableHeaderX.length; col++) {
+                const cellValue = [sub.value, 'Text', 'None',sub.title][col];
+                const columnWidth = col === 0 ? firstColumnWidthX : otherColumnsWidthX;
+                doc.text(cellValue, col * columnWidth + 50, (rowX + 1) * 30 + 100);
+            }
+
+            rowX++;
+        }
 
         // Generate a unique filename for the PDF
         const fileName = `driver_profile_${Date.now()}.pdf`;
@@ -104,67 +104,25 @@ const createNewDriver = async (req,res) =>{
             console.log(url)
 
             const token = req.headers.token
-            let decoded = jwt.verify(token,'your-secret-key');
+            let decoded = jwt.verify(token, 'your-secret-key');
 
             let pdf = new PDF({
                 name: fileName,
-                link:url,
-                userId:decoded.userId
+                link: url,
+                userId: decoded.userId
             })
 
             await pdf.save()
 
-        },2000)
+        }, 2000)
 
         console.log(`PDF saved: ${filePath}`);
 
         res.status(200).json({ message: 'PDF generated and saved successfully' });
-    }catch (error){
+    } catch (error) {
         console.log(error.message)
     }
-    // try {
-    //
-    //     // Add content to the PDF document
-    //
-    //     for (const entry in data) {
-    //         let decoded = JSON.parse(data[entry])
-    //         if(decoded.answerDataType === 'text' || decoded.answerDataType === 'number'){
-    //
-    //         }
-    //     }
-    //
-    //     let values = data.values()
-    //     console.log(values)
-    //
-    //
-    //     for(const entry in data){
-    //         let decoded = JSON.parse(data[entry])
-    //         if(decoded.group != undefined || decoded.group != null){
-    //             console.log(decoded)
-    //             const groups = decoded.reduce((acc, obj) => {
-    //                 const groupKey = obj.group;
-    //                 if (!acc[groupKey]) {
-    //                     acc[groupKey] = [];
-    //                 }
-    //                 acc[groupKey].push(obj);
-    //                 return acc;
-    //             }, {});
-    //
-    //             for(g in groups){
-    //                 doc.fontSize(18).text(g)
-    //                 for(d of g){
-    //                     doc.fontSize(16).text(`${d.title}  `)
-    //                     doc.fontSize(16).text(d.value)
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
 
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).send('Error generating PDF');
-    // }
 }
 
 const getAllDrivers = async (req,res) =>{
