@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car List</title>
+    <style>
+        .controls > *{
+          flex-grow: 1;
+        }
+
+        .controls > :first-child{
+          margin-right: 10px
+        }
+    </style>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<%- include('../components/navbar') %>
+
+<div class="container mt-5">
+    <h1 class="text-center">Car List</h1>
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-primary" href="/cars/create">Add New Car</a>
+    </div>
+    <% if (cars.length > 0) { %>
+        <table class="table text-center table-striped table-bordered table-hovers">
+            <thead>
+            <tr>
+                <th>Board Number</th>
+                <th>Private Number</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% cars.forEach(car => { %>
+                <tr>
+                    <td><%= car.boardNumber %></td>
+                    <td><%= car.privateNumber %></td>
+                    <td class="d-flex controls">
+                        <a class="btn btn-secondary btn-sm me-2" href="/api/cars/<%= car._id %>/edit">Edit</a>
+                        <form action="/api/cars/<%= car._id %>?_method=DELETE" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm w-100">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <div class="alert alert-info">No cars found. Please add a new car.</div>
+    <% } %>
+</div>
+<!-- Add Bootstrap JS and Popper.js scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

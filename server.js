@@ -49,15 +49,17 @@ const fieldRouter = require('./routes/fieldRoute')
 
 const userRouter = require('./routes/usersRouter')
 const pdfRouter = require('./routes/pdfRoute')
-app.use('/api',driverRouter,groupRouter,fieldRouter,userRouter,pdfRouter)
+const carRouter = require('./routes/carRoute')
+app.use('/api',driverRouter,groupRouter,fieldRouter,userRouter,pdfRouter,carRouter)
 
 const driverFront = require('./routes/driverFront')
 const groupFront = require('./routes/groupFront')
 const fieldFront = require('./routes/fieldFront')
 const pdfFront = require('./routes/pdfFront')
 const usersFront = require('./routes/usersFront')
+const carFront = require('./routes/carFront')
 
-app.use(driverFront,groupFront,fieldFront,pdfFront,usersFront)
+app.use(driverFront,groupFront,fieldFront,pdfFront,usersFront,carFront)
 
 
 app.get('/',(req,res) =>{
