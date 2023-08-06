@@ -70,9 +70,9 @@
 
         .search-container input {
             width: 100%;
-            max-width: 300px;
             padding: 8px;
             border-radius: 5px;
+            outline: none;
         }
     </style>
 </head>
@@ -99,9 +99,9 @@
             <thead>
             <tr>
                 <th>Title</th>
-                <th>Answer Data Type</th>
-                <th>Has Required Description</th>
-                <th>Required Description</th>
+                <th>Type</th>
+                <th>Has Description</th>
+                <th>Description</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -114,9 +114,7 @@
                     <td><%= formField.requiredDescription %></td>
                     <td>
                         <a href="/fields/<%= formField._id %>/update" class="btn btn-info btn-sm btn-edit">Edit</a>
-                        <form action="/api/formFields/<%= formField._id %>?_method=DELETE" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="deleteField('<%= formField._id %>')">Delete</button>
                     </td>
                 </tr>
             <% }); %>
@@ -143,6 +141,24 @@
             }
         }
     });
+
+    function deleteField(id){
+        fetch(`/api/formFields/${id}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    alert('Field Deleted successfully.');
+                    window.location.href = '/fields'; // Redirect to the location list page
+                } else {
+                    alert('Failed to delete field. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the field. Please try again.');
+            });
+    }
 </script>
 </body>
 </html>

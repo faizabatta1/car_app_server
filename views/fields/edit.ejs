@@ -19,10 +19,8 @@
                 <option value="number">Number</option>
                 <option value="yes_no">Yes-No</option>
                 <option value="file">File</option>
-                <option value="files">Files</option>
                 <option value="date">Date</option>
                 <option value="image">Image</option>
-                <option value="images">Images</option>
             </select>
         </div>
         <div class="form-group form-check">
@@ -33,7 +31,12 @@
             <label for="requiredDescription">Required Description</label>
             <input type="text" class="form-control" id="requiredDescription" name="requiredDescription" value="<%= formField.requiredDescription %>">
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Update</button>
+            &nbsp;
+            &nbsp;
+            <a href="/fields" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 
@@ -61,8 +64,7 @@
         })
             .then(response => {
                 if (response.status == 200) {
-                    // Handle success response
-                    console.log('Form field updated successfully');
+                    location.href = '/fields'
                 } else {
                     // Handle error response
                     console.error('Failed to update form field');

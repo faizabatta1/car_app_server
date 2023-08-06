@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const axios = require('axios')
-
+const FormField = require('../models/FormField')
 router.get('/fields',async (req,res) =>{
     try{
-        const response = await axios.get('http://localhost:3000/api/formFields')
-        const fields = response.data
 
+
+        const formFields = await FormField.find({});
         return res.render('fields/index',{
-            formFields: fields
+            formFields: formFields
         })
     }catch (error){
         return res.render('errors/internal',{
@@ -23,11 +23,9 @@ router.get('/fields/create',async (req,res) =>{
         groups: groups
     })
 })
-
-const Field = require('../models/FormField')
 router.get('/fields/:id/update', async (req,res) => {
     try{
-        let formField = await Field.findOne({_id:req.params.id})
+        let formField = await FormField.findOne({_id:req.params.id})
         return res.status(200).render('fields/edit',{
             formField
         })

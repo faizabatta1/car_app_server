@@ -5,10 +5,13 @@ const uuid = require("uuid");
 const bucket = require("../utils/firebase");
 const PDF = require('../models/PDF')
 const jwt = require('jsonwebtoken')
+const User = require('../models/usersModel')
 
 const createNewDriver = async (req,res) =>{
-    console.log(req.body)
     try {
+        const { data, token } = req.headers
+        const information = JSON.parse(data)
+
         let values = Object.values(req.body).map(e => JSON.parse(e))
 
         const groupedData = values.reduce((acc, obj) => {
@@ -20,11 +23,19 @@ const createNewDriver = async (req,res) =>{
             return acc;
         }, {});
 
-        console.log(groupedData);
 
         // Create a new PDF document
         const doc = new PDFDocument();
         doc.font('Helvetica-Bold').fontSize(12).text('Daily car schedule', { align: 'center' });
+
+        doc.text(`Location: ${information.location}`,50,100)
+        doc.text(`Car: ${information.boardNumber + "  " + information.privateNumber}`,50,120)
+        doc.text(`Shift: ${information.day + information.period}`,50,140)
+
+        doc.text(`Date: ${new Date().toLocaleString()}`,50,160)
+        let decodedToken = jwt.verify(token,'your-secret-key')
+        let user = await User.findOne({ _id: decodedToken.userId })
+        doc.text(`User: ${user.name}-${user.accountId}-${user.phone}`,50,180)
 
         // Add table header
         const tableHeader = ['Checked', 'Text', 'None', 'Question'];
@@ -34,7 +45,7 @@ const createNewDriver = async (req,res) =>{
         doc.font('Helvetica-Bold');
         for (let i = 0; i < tableHeader.length; i++) {
             const columnWidth = i === 0 ? firstColumnWidth : otherColumnsWidth;
-            doc.text(tableHeader[i], i * columnWidth + 50, 100);
+            doc.text(tableHeader[i], i * columnWidth + 50, 220);
         }
 
         doc.font('Helvetica');
@@ -43,7 +54,7 @@ const createNewDriver = async (req,res) =>{
             for (let col = 0; col < tableHeader.length; col++) {
                 const cellValue = [sub.value, 'Text', 'None',sub.title][col];
                 const columnWidth = col === 0 ? firstColumnWidth : otherColumnsWidth;
-                doc.text(cellValue, col * columnWidth + 50, (row + 1) * 30 + 100);
+                doc.text(cellValue, col * columnWidth + 50, (row + 1) * 30 + 220);
             }
 
             row++;

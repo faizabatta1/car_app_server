@@ -63,8 +63,8 @@
                 <tr>
                     <td><%= new Date(+pdf.createdAt).toLocaleDateString() %></td>
                     <td><%= pdf.name %></td>
-                    <td><%= pdf.userId.name ?? 'User'  %></td>
-                    <td><%= pdf.userId.accountId %></td>
+                    <td><%= pdf.userId?.name ?? 'Removed'  %></td>
+                    <td><%= pdf.userId?.accountId ?? "Unknown"  %></td>
                     <td><a href="/pdfs/<%= pdf._id %>">View PDF</a></td>
                     <td class="d-flex custom-pdf-controls">
                         <button class="btn btn-danger btn-sm w-100" onclick="deletePdf('<%= pdf._id %>')">Delete</button>

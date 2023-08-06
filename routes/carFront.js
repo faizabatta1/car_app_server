@@ -16,6 +16,19 @@ router.get('/cars', async (req,res) =>{
 router.get('/cars/create', async (req,res) =>{
   return res.status(200).render('car/create')
 })
+
+router.get('/cars/:id/update', async (req,res) =>{
+  try{
+    let car = await Car.findOne({ _id: req.params.id })
+    return res.status(200).render('car/update',{
+      car
+    })
+  }catch (error){
+    return res.status(500).render('errors/internal',{
+      error: error.message
+    })
+  }
+})
 // router.get('/cars/update')
 
 module.exports = router

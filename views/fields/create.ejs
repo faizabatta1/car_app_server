@@ -20,10 +20,8 @@
                 <option value="number">Number</option>
                 <option value="yes_no">Yes-No</option>
                 <option value="file">File</option>
-                <option value="files">Files</option>
                 <option value="date">Date</option>
                 <option value="image">Image</option>
-                <option value="images">Images</option>
             </select>
         </div>
         <div class="form-group">
@@ -71,7 +69,7 @@
                 const formData = new FormData(event.target);
                 console.log(formData)
                 try {
-                    await fetch("/api/formFields", {
+                    let response = await fetch("/api/formFields", {
                         method: "POST",
                         body: JSON.stringify({
                             title: title.value,
@@ -86,7 +84,12 @@
                         }
                     })
 
-                    // location.href = 'http://localhost:3000/fields'
+                    if(response.status != 200){
+                        alert("Failed To Create Field")
+                    }
+
+                    location.href = '/fields'
+
 
                 } catch (error) {
                     console.log('erorr')

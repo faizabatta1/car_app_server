@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Location</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<%- include('../components/navbar') %>
+
+<div class="container mt-5">
+    <h1 class="text-center">Edit Location</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="editLocationForm">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" value="<%= location.location %>" required>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" onclick="updateLocation()">Save Changes</button>
+                    <a href="/locations" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Add Bootstrap JS and Popper.js scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function updateLocation() {
+        const locationId = '<%= location._id %>';
+        let location = document.querySelector('#location')
+
+        fetch(`/api/locations/${locationId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                location: location.value
+            })
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    alert('Location details updated successfully.');
+                    window.location.href = '/locations'; // Redirect to the location list page
+                } else {
+                    alert('Failed to update location details. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating location details. Please try again.');
+            });
+    }
+</script>
+</body>
+</html>
