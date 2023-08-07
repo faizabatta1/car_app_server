@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // Set the file name with original name + timestamp to make it unique
-        cb(null, Date.now() + '-' + file.originalname);
+        cb(null, Date.now() + '_' + file.originalname);
     }
 });
 

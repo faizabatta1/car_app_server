@@ -2,8 +2,9 @@ const Location = require('../models/Location')
 
 const createLocation = async (req,res) =>{
     try{
-        const { location } = req.body
-        let loc = new Location({ location })
+        const { location, days, shifts } = req.body
+        console.log(req.body)
+        let loc = new Location({ location, days, shifts })
         await loc.save()
 
         return res.status(200).send("Location Was Created")
@@ -14,10 +15,12 @@ const createLocation = async (req,res) =>{
 
 const updateLocation = async (req,res) =>{
     try{
-        const { location } = req.body
+        const { location, days, shifts } = req.body
         const { id } = req.params
         await Location.findOneAndUpdate({ _id: id },{
-            location
+            location,
+            days,
+            shifts
         },{ $new: true })
 
         return res.status(200).send("Location Was Updated")

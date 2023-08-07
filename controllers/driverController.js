@@ -9,6 +9,8 @@ const User = require('../models/usersModel')
 
 const createNewDriver = async (req,res) =>{
     try {
+        console.log(req.file)
+        console.log(req.files)
         const { data, token } = req.headers
         const information = JSON.parse(data)
 
@@ -28,33 +30,65 @@ const createNewDriver = async (req,res) =>{
         const doc = new PDFDocument();
         doc.font('Helvetica-Bold').fontSize(12).text('Daily car schedule', { align: 'center' });
 
-        doc.text(`Location: ${information.location}`,50,100)
+        doc.text(`Location: ${information.locations.join(',')}`,50,100)
         doc.text(`Car: ${information.boardNumber + "  " + information.privateNumber}`,50,120)
-        doc.text(`Shift: ${information.day + information.period}`,50,140)
+        doc.text(`Shift: ${information.day + " - " + information.period}`,50,140)
+        doc.text(`Number Of Violations: ${information.trafficViolations}`,50,160)
 
-        doc.text(`Date: ${new Date().toLocaleString()}`,50,160)
+        doc.text(`Date: ${information.date}`,50,180)
         let decodedToken = jwt.verify(token,'your-secret-key')
         let user = await User.findOne({ _id: decodedToken.userId })
-        doc.text(`User: ${user.name}-${user.accountId}-${user.phone}`,50,180)
+        doc.text(`User: ${user.name} - ${user.accountId}`,50,200)
 
         // Add table header
-        const tableHeader = ['Checked', 'Text', 'None', 'Question'];
+        const tableHeader = ['Title', 'Status', 'Notes'];
         const firstColumnWidth = 300; // Width for the first column
-        const otherColumnsWidth = 60; // Width for other columns
+        const otherColumnsWidth = 140; // Width for other columns
 
         doc.font('Helvetica-Bold');
         for (let i = 0; i < tableHeader.length; i++) {
-            const columnWidth = i === 0 ? firstColumnWidth : otherColumnsWidth;
-            doc.text(tableHeader[i], i * columnWidth + 50, 220);
+            switch (i){
+                case 0:
+                    doc.text(tableHeader[i],50,240)
+                    break;
+                case 1:
+                    doc.text(tableHeader[i],340,240)
+                    break;
+                case 2:
+                    doc.text(tableHeader[i],380,240)
+                    break;
+                default:
+                    break;
+
+            }
+            // const columnWidth = i === 0 ? firstColumnWidth : otherColumnsWidth;
+            // doc.text(tableHeader[i], i * columnWidth + 50, 220);
         }
 
         doc.font('Helvetica');
         let row = 0;
-        for (let sub of groupedData['First']) {
+
+        for (let sub of [...groupedData['First'],...groupedData['Second']]) {
             for (let col = 0; col < tableHeader.length; col++) {
-                const cellValue = [sub.value, 'Text', 'None',sub.title][col];
-                const columnWidth = col === 0 ? firstColumnWidth : otherColumnsWidth;
-                doc.text(cellValue, col * columnWidth + 50, (row + 1) * 30 + 220);
+                let newTitle = sub.title.length > 50 ?
+                    sub.title.substring(0, sub.title.length / 2) + '\n' + sub.title.substring(sub.title.length / 2) : sub.title
+                if(sub.answerDataType == 'yes_no'){
+                    switch (col){
+                        case 0:
+                            doc.text([newTitle, sub.value, 'XXX'][col],50,(row + 1) * 30 + 240)
+                            break;
+                        case 1:
+                            doc.text([newTitle,sub.value != 'Nei' ? 'Ja' : 'Nei', 'XXX'][col],340,(row + 1) * 30 + 240)
+                            break;
+                        case 2:
+                            doc.text([newTitle,sub.value, sub.value != "Nei" ? (sub.hasRequiredDescription ? sub.value : 'XXX') : 'XXX'][col],380,(row + 1) * 30 + 240)
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+
             }
 
             row++;
@@ -62,27 +96,12 @@ const createNewDriver = async (req,res) =>{
 
         doc.addPage()
 
-        // Add table header
-        const tableHeaderX = ['Day', 'Night', 'Weekend', 'Mistakes'];
-        const firstColumnWidthX = 300; // Width for the first column
-        const otherColumnsWidthX = 60; // Width for other columns
-
-        doc.font('Helvetica-Bold');
-        for (let i = 0; i < tableHeaderX.length; i++) {
-            const columnWidth = i === 0 ? firstColumnWidthX : otherColumnsWidthX;
-            doc.text(tableHeaderX[i], i * columnWidth + 50, 100);
-        }
-
-        doc.font('Helvetica');
-        let rowX = 0;
-        for (let sub of groupedData['Second']) {
-            for (let col = 0; col < tableHeaderX.length; col++) {
-                const cellValue = [sub.value, 'Text', 'None',sub.title][col];
-                const columnWidth = col === 0 ? firstColumnWidthX : otherColumnsWidthX;
-                doc.text(cellValue, col * columnWidth + 50, (rowX + 1) * 30 + 100);
-            }
-
-            rowX++;
+        for(let file of req.files){
+            doc.fontSize(20).text(file.fieldname,20,20)
+            doc.image(file.path,20,50,{
+                height: 250,
+                width: 250
+            })
         }
 
         // Generate a unique filename for the PDF

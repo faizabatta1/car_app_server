@@ -5,6 +5,14 @@ const LocationSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    days:{
+        type:[String],
+        required: true
+    },
+    shifts:{
+        type:[String],
+        required:true
     }
 })
 

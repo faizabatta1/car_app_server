@@ -19,10 +19,6 @@
             <input type="text" class="form-control" id="accountId" name="accountId" required>
         </div>
         <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" required>
-        </div>
-        <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
@@ -38,7 +34,6 @@
     function createUser() {
         let name = document.querySelector('#name')
         let accountId = document.querySelector('#accountId')
-        let phone = document.querySelector('#phone')
         let password = document.querySelector('#password')
 
         fetch('/api/users', {
@@ -46,7 +41,6 @@
             body: JSON.stringify({
                 name: name.value,
                 accountId: accountId.value,
-                phone: phone.value,
                 password: password.value
             }),
             headers:{

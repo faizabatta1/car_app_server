@@ -18,10 +18,6 @@
             <input type="text" class="form-control" id="accountId" name="accountId" value="<%= user.accountId %>" required>
         </div>
         <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" value="<%= user.phone %>" required>
-        </div>
-        <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
@@ -38,7 +34,6 @@
     function updateUser() {
         const name = document.getElementById("name");
         const accountId = document.getElementById("accountId");
-        const phone = document.getElementById("phone");
         const password = document.getElementById("password");
 
         const userId = "<%= user._id %>";
@@ -48,7 +43,6 @@
             body: JSON.stringify({
                 name: name.value,
                 accountId: accountId.value,
-                phone: phone.value,
                 password: password.value,
             }),
             headers:{

@@ -31,7 +31,7 @@ exports.deleteAllUsers = async (req, res) =>{
 
 exports.register = async (req, res) => {
   try {
-    const { name, accountId, password, phone } = req.body;
+    const { name, accountId, password } = req.body;
     console.log(req.body);
 
     const existingUser = await User.findOne({ accountId: accountId });
@@ -40,17 +40,11 @@ exports.register = async (req, res) => {
       return res.status(400).send('Email already exists');
     }
 
-    const existingPhone = await User.findOne({ phone: phone })
-    if(existingPhone){
-      return res.status(400).send("Phone Already Exists")
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name: name,
       accountId: accountId,
       password: hashedPassword,
-      phone:phone
     });
 
     const savedUser = await newUser.save();
@@ -135,7 +129,7 @@ exports.updateUser = async (req, res) => {
   console.log(req.body)
   try {
     const userId = req.params.id;
-    const { name, accountId, phone, password } = req.body;
+    const { name, accountId, password } = req.body;
 
     const existingUser = await User.findOne({ accountId: accountId });
 
@@ -145,7 +139,7 @@ exports.updateUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name: name, accountId: accountId, phone: phone, password: hashedPassword },
+      { name: name, accountId: accountId, password: hashedPassword },
       { $new: true }
     );
 

@@ -54,6 +54,8 @@
                 <thead>
                 <tr>
                     <th>Location</th>
+                    <th>Days</th>
+                    <th>Shifts</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -67,6 +69,8 @@
                     <% locations.forEach(location => { %>
                         <tr>
                             <td><%= location.location %></td>
+                            <td><%= location.days.join(', ') %></td>
+                            <td><%= location.shifts.join(', ') %></td>
                             <td class="controls">
                                 <a href="/locations/<%= location._id %>/update" class="btn btn-sm btn-primary">Edit</a>
                                 <button class="btn btn-sm btn-danger" onclick="deleteLocation('<%= location._id %>')">Delete</button>
