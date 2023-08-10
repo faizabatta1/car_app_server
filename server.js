@@ -14,7 +14,7 @@ app.use(cookieParser())
 const cors = require('cors')
 app.use(cors())
 
-app.use('/public',express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs')
 
 

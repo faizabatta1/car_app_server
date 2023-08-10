@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .image-item {
+            text-align: center;
+        }
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<h2>Daily Car Schedule</h2>
+<table>
+    <tr>
+        <td>Location</td>
+        <td>{{location}}</td>
+    </tr>
+    <tr>
+        <td>Car</td>
+        <td>{{car}}</td>
+    </tr>
+    <tr>
+        <td>Shift</td>
+        <td>{{shift}}</td>
+    </tr>
+    <tr>
+        <td>Number of Violations</td>
+        <td>{{violations}}</td>
+    </tr>
+    <tr>
+        <td>Date</td>
+        <td>{{date}}</td>
+    </tr>
+    <tr>
+        <td>User</td>
+        <td>{{user}}</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Notes</th>
+    </tr>
+    {{#each rows}}
+    <tr>
+        <td>{{title}}</td>
+        <td>{{status}}</td>
+        <td>{{notes}}</td>
+    </tr>
+    {{/each}}
+</table>
+
+<div class="image-grid" style="page-break-before: always;">
+    {{#each images}}
+    <div class="image-item">
+        <h2>{{fieldname}}</h2>
+        <img src="{{path}}" alt="{{fieldname}}">
+    </div>
+    {{/each}}
+</div>
+</body>
+</html>
