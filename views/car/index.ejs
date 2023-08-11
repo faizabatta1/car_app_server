@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car List</title>
+    <title>Billiste</title>
     <style>
         .controls{
             display: flex;
@@ -24,14 +24,14 @@
 <%- include('../components/navbar') %>
 
 <div class="container mt-5">
-    <h1 class="text-center">Car List</h1>
-    <a href="/cars/create" class="btn btn-primary mb-3">Add New Car</a>
+    <h1 class="text-center">Billiste</h1>
+    <a href="/cars/create" class="btn btn-primary mb-3">Kegge til ny bil</a>
     <div class="table-responsive">
         <table class="table table-bordered table-hover table-striped text-center">
             <thead>
             <tr>
-                <th>Board Number</th>
-                <th>Private Number</th>
+                <th>Regnr.</th>
+                <th>Tjenstebilnr.</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -49,7 +49,7 @@
                 <% }); %>
             <% } else { %>
                 <tr>
-                    <td colspan="3" class="text-center">No cars found.</td>
+                    <td colspan="3" class="text-center">Ingen biler funnet.</td>
                 </tr>
             <% } %>
             </tbody>
@@ -68,16 +68,16 @@
                 .then(response => {
                     if (response.ok) {
                         // Car deleted successfully, you can update the UI or show a success message
-                        alert('Car deleted successfully!');
+                        alert('Bilen ble slettet!');
                         window.location.reload(); // Refresh the page to reflect the changes
                     } else {
                         // Handle the error response if needed
-                        alert('Failed to delete car. Please try again.');
+                        alert('Kunne ikke slette bilen. Vær så snill, prøv på nytt.');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again later.');
+                    alert('En feil oppstod. Prøv igjen senere.');
                 });
         }
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User List</title>
+    <title>Bruker Liste</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         table {
@@ -25,18 +25,17 @@
 <%- include('../components/navbar') %>
 <div class="container">
     <div class="d-flex justify-content-end mb-4">
-        <a href="/users/create" class="btn btn-info"> Create User</a>
+        <a href="/users/create" class="btn btn-info"> Lage ny bruker</a>
     </div>
     <div class="form-group">
-        <input type="text" class="form-control" id="searchInput" placeholder="Search by name, account ID, or phone">
+        <input type="text" class="form-control" id="searchInput" placeholder="Søk etter navn, konto-ID">
     </div>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Account ID</th>
-            <th>Phone</th>
-            <th>Created At</th>
+            <th>Navn</th>
+            <th>PN-ID</th>
+            <th>Ble lagt siden</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -45,11 +44,10 @@
             <tr>
                 <td><%= user.name %></td>
                 <td><%= user.accountId %></td>
-                <td><%= user.phone %></td>
                 <td><%= new Date(+user.createdAt).toLocaleString() %></td>
                 <td class="controls">
-                    <a href="/users/<%= user._id %>/edit" class="btn btn-primary btn-sm me-1">Edit</a>
-                    <button onclick="deleteUser('<%= user._id %>')" class="btn btn-danger btn-sm ms-4">Delete</button>
+                    <a href="/users/<%= user._id %>/edit" class="btn btn-primary btn-sm me-1">Rediger</a>
+                    <button onclick="deleteUser('<%= user._id %>')" class="btn btn-danger btn-sm ms-4">slett</button>
                 </td>
             </tr>
         <% }); %>
@@ -74,7 +72,7 @@
                     // Reload the page after successful deletion
                     location.reload();
                 } else {
-                    alert('Failed to delete the user. Please try again.');
+                    alert('Kunne ikke slette brukeren. Vær så snill, prøv på nytt.');
                 }
             } catch (error) {
                 console.error('Error deleting user:', error);

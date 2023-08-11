@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location List</title>
+    <title>Ruteliste</title>
     <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
@@ -46,16 +46,16 @@
 <%- include('../components/navbar') %>
 
 <div class="container">
-    <h1>Location List</h1>
+    <h1>Rute List</h1>
     <div class="row justify-content-center">
         <div class="col-md-8 table-container p-3">
-            <a href="/locations/create" class="btn btn-primary add-location-btn">Add New Location</a>
+            <a href="/locations/create" class="btn btn-primary add-location-btn">Add ny rute</a>
             <table class="table table-striped table-bordered text-center">
                 <thead>
                 <tr>
-                    <th>Location</th>
-                    <th>Days</th>
-                    <th>Shifts</th>
+                    <th>Rute</th>
+                    <th>Dag</th>
+                    <th>Vakt</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -63,7 +63,7 @@
                 <!-- Location data will be inserted here -->
                 <% if (locations.length === 0) { %>
                     <tr>
-                        <td colspan="2" class="text-center">No locations found.</td>
+                        <td colspan="2" class="text-center">Ingen steder funnet.</td>
                     </tr>
                 <% } else { %>
                     <% locations.forEach(location => { %>
@@ -73,7 +73,7 @@
                             <td><%= location.shifts.join(', ') %></td>
                             <td class="controls">
                                 <a href="/locations/<%= location._id %>/update" class="btn btn-sm btn-primary">Edit</a>
-                                <button class="btn btn-sm btn-danger" onclick="deleteLocation('<%= location._id %>')">Delete</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteLocation('<%= location._id %>')">Slett</button>
                             </td>
                         </tr>
                     <% }); %>

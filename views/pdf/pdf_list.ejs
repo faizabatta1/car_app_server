@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PDF List</title>
+    <title>PDF Liste</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -50,9 +50,9 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Date</th>
-                <th>Name</th>
-                <th>User</th>
+                <th>Dato</th>
+                <th>Navn</th>
+                <th>Bruker</th>
                 <th>ID</th>
                 <th>Link</th>
                 <th>Action</th>
@@ -65,9 +65,9 @@
                     <td><%= pdf.name %></td>
                     <td><%= pdf.userId?.name ?? 'Removed'  %></td>
                     <td><%= pdf.userId?.accountId ?? "Unknown"  %></td>
-                    <td><a href="/pdfs/<%= pdf._id %>">View PDF</a></td>
+                    <td><a href="/pdfs/<%= pdf._id %>">Se PDF</a></td>
                     <td class="d-flex custom-pdf-controls">
-                        <button class="btn btn-danger btn-sm w-100" onclick="deletePdf('<%= pdf._id %>')">Delete</button>
+                        <button class="btn btn-danger btn-sm w-100" onclick="deletePdf('<%= pdf._id %>')">Slett</button>
                     </td>
                 </tr>
             <% }); %>
@@ -78,7 +78,7 @@
 
 <script>
     function deletePdf(pdfId) {
-        if (confirm("Are you sure you want to delete this PDF?")) {
+        if (confirm("Er du sikker på at du vil slette denne PDF-filen?")) {
             fetch(`/api/pdfs/${pdfId}`, {
                 method: 'DELETE',
                 headers: {

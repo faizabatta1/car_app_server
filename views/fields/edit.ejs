@@ -13,29 +13,29 @@
             <input type="text" class="form-control" id="title" name="title" value="<%= formField.title %>" required>
         </div>
         <div class="form-group">
-            <label for="answerDataType">Answer Data Type</label>
+            <label for="answerDataType">Svardatatype</label>
             <select class="form-control" id="answerDataType" name="answerDataType" required>
-                <option value="text">Text</option>
-                <option value="number">Number</option>
-                <option value="yes_no">Yes-No</option>
+                <option value="text">Tekst</option>
+                <option value="number">Nummer</option>
+                <option value="yes_no">Ja-Nei</option>
                 <option value="file">File</option>
-                <option value="date">Date</option>
-                <option value="image">Image</option>
+                <option value="date">Dato</option>
+                <option value="image">Bilde</option>
             </select>
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="hasRequiredDescription" name="hasRequiredDescription" <%= formField.hasRequiredDescription ? 'checked' : '' %>>
-            <label class="form-check-label" for="hasRequiredDescription">Has Required Description</label>
+            <label class="form-check-label" for="hasRequiredDescription">Har nødvendig beskrivelse</label>
         </div>
         <div class="form-group">
-            <label for="requiredDescription">Required Description</label>
+            <label for="requiredDescription">Nødvendig beskrivelse</label>
             <input type="text" class="form-control" id="requiredDescription" name="requiredDescription" value="<%= formField.requiredDescription %>">
         </div>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Oppdater</button>
             &nbsp;
             &nbsp;
-            <a href="/fields" class="btn btn-secondary">Cancel</a>
+            <a href="/fields" class="btn btn-secondary">Avbrytt</a>
         </div>
     </form>
 </div>

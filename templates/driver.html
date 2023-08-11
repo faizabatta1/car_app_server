@@ -49,42 +49,42 @@
 <h2>Daily Car Schedule</h2>
 <table>
     <tr>
-        <td>Location</td>
+        <td colspan="2">Location</td>
         <td>{{location}}</td>
     </tr>
     <tr>
-        <td>Car</td>
+        <td colspan="2">Car</td>
         <td>{{car}}</td>
     </tr>
     <tr>
-        <td>Shift</td>
+        <td colspan="2">Shift</td>
         <td>{{shift}}</td>
     </tr>
     <tr>
-        <td>Number of Violations</td>
+        <td colspan="2">Number of Violations</td>
         <td>{{violations}}</td>
     </tr>
     <tr>
-        <td>Date</td>
+        <td colspan="2">Date</td>
         <td>{{date}}</td>
     </tr>
     <tr>
-        <td>User</td>
+        <td colspan="2">User</td>
         <td>{{user}}</td>
     </tr>
 </table>
 
 <table>
     <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Notes</th>
+        <th style="text-align: center">Title</th>
+        <th style="text-align: center">Status</th>
+        <th style="text-align: center">Notes</th>
     </tr>
     {{#each rows}}
     <tr>
         <td>{{title}}</td>
-        <td>{{status}}</td>
-        <td>{{notes}}</td>
+        <td style="text-align: center">{{status}}</td>
+        <td style="text-align: center; color: red">{{notes}}</td>
     </tr>
     {{/each}}
 </table>

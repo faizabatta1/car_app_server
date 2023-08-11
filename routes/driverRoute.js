@@ -10,7 +10,7 @@ const multer = require('multer')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Set the destination folder where files will be saved
-        cb(null, 'uploads/'); // Create a folder named 'uploads' in your project root
+        cb(null, 'public/images/drivers/'); // Create a folder named 'uploads' in your project root
     },
     filename: function (req, file, cb) {
         // Set the file name with original name + timestamp to make it unique

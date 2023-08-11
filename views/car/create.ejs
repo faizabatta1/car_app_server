@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Car</title>
+    <title>Legg ny bil</title>
     <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <%- include('../components/navbar') %>
 <div class="container mt-5">
-    <h1 class="text-center">Create New Car</h1>
+    <h1 class="text-center">Legg ny bil</h1>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form id="createCarForm">
                 <div class="mb-3">
-                    <label for="boardNumber" class="form-label">Board Number</label>
+                    <label for="boardNumber" class="form-label">Regnr.</label>
                     <input type="text" class="form-control" id="boardNumber" name="boardNumber" required>
                 </div>
                 <div class="mb-3">
-                    <label for="privateNumber" class="form-label">Private Number</label>
+                    <label for="privateNumber" class="form-label">Tjenstebilnr.</label>
                     <input type="text" class="form-control" id="privateNumber" name="privateNumber" required>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary me-3" onclick="submitForm()">Save</button>
+                    <button type="button" class="btn btn-primary me-3" onclick="submitForm()">legge til</button>
                     &nbsp;
                     &nbsp;
-                    <a href="/cars" class="btn btn-secondary">Cancel</a>
+                    <a href="/cars" class="btn btn-secondary">Avbryt</a>
                 </div>
             </form>
 
@@ -56,16 +56,16 @@
       .then(response => {
         if (response.ok) {
           // Car created successfully, you can redirect to another page or display a success message
-          alert('Car created successfully!');
+          alert('Bil opprettet vellykket!');
           window.location.href = '/cars'; // Redirect to the car list page
         } else {
           // Handle the error response if needed
-          alert('Failed to create car. Please try again.');
+          alert('Kunne ikke opprette bilen. Vær så snill, prøv på nytt.');
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
+        alert('Æsjj! feil oppsto. Prøv igjen senere.');
       });
   }
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Location</title>
+    <title>Legge til ny rute</title>
     <!-- Add Bootstrap CSS link -->
     <style>
         .checkbox-group {
@@ -27,39 +27,39 @@
 <%- include('../components/navbar') %>
 
 <div class="container mt-5">
-    <h1 class="text-center">Add New Location</h1>
+    <h1 class="text-center">Legge til ny rute</h1>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form id="newLocationForm">
                 <div class="form-group">
-                    <label for="location">Location</label>
+                    <label for="location">Rute</label>
                     <input type="text" class="form-control" id="location" name="location" required>
                 </div>
                 <div class="d-flex justify-content-between">
                     <div class="form-group">
-                        <label>Choose Days</label>
+                        <label>Velg dager</label>
                         <div class="checkbox-group">
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="saturday"> Saturday</label>
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="sunday"> Sunday</label>
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="monday"> Monday</label>
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="tuesday"> Tuesday</label>
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="wednesday"> Wednesday</label>
-                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="thursday"> Thursday</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="saturday"> Lørdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="sunday"> Søndag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="monday"> Mandag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="tuesday"> Tirsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="wednesday"> Onsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="thursday"> Torsdag</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Choose Shift</label>
+                        <label>Velg Shift</label>
                         <div class="checkbox-group">
-                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="day"> Day</label>
-                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="night"> Night</label>
-                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="weekend"> Weekend</label>
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="day"> Dag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="night"> Natt</label>
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="weekend"> Helg</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" onclick="createLocation()">Add Location</button>
-                    <a href="/locations" class="btn btn-secondary">Cancel</a>
+                    <button type="button" class="btn btn-primary" onclick="createLocation()">Legg til plassering</button>
+                    <a href="/locations" class="btn btn-secondary">Avbrytt</a>
                 </div>
             </form>
         </div>

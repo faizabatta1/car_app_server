@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Group</title>
+    <title>Rediger gruppe</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -10,18 +10,18 @@
 <div class="container">
     <form action="/groups/<%= group._id %>?_method=PUT" method="POST">
         <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">Navn</label>
             <input type="text" class="form-control" id="name" name="name" value="<%= group.name %>" required>
         </div>
         <div class="form-group">
-            <label for="notice">Notice</label>
+            <label for="notice">Merke</label>
             <input type="text" class="form-control" id="notice" name="notice" value="<%= group.notice %>" required>
         </div>
         <div class="form-group">
-            <label for="text">Text</label>
+            <label for="text">Tekst</label>
             <input type="text" class="form-control" id="text" name="text" value="<%= group.text %>" required>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary">Oppdatere</button>
     </form>
 </div>
 </body>

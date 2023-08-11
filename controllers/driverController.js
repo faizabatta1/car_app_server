@@ -110,7 +110,7 @@ const puppeteer = require('puppeteer')
 //         const fileName = `driver_profile_${Date.now()}.pdf`;
 //
 //         // Save the PDF to a file on the server
-//         const filePath = `./pdfs/${fileName}`;
+//         const filePath = `./profiles/${fileName}`;
 //         doc.pipe(fs.createWriteStream(filePath));
 //         doc.end();
 //
@@ -158,8 +158,12 @@ const puppeteer = require('puppeteer')
 // }
 
 const createNewDriver = async (req,res) =>{
-    const { data_info, token } = req.headers
-    const information = JSON.parse(data_info)
+    console.log(req.headers)
+    console.log(req.body)
+    const { data, token } = req.headers
+    const information = JSON.parse(data)
+
+    console.log(information)
 
     let values = Object.values(req.body).map(e => JSON.parse(e))
 
@@ -173,46 +177,60 @@ const createNewDriver = async (req,res) =>{
     }, {});
 
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: 'new'
+    });
     const page = await browser.newPage();
 
     // Load the HTML template
     const htmlTemplate = fs.readFileSync('templates/driver.html', 'utf8');
-    console.log(htmlTemplate)
+    let decodedToken = jwt.verify(token,'your-secret-key')
+    let user = await User.findOne({ _id: decodedToken.userId })
 
     // Replace placeholders with dynamic data
-    const data = {
-        location: 'Location Value',
-        car: 'Car Value',
-        shift: 'Shift Value',
-        violations: 'Violations Value',
-        date: 'Date Value',
-        user: 'User Value',
-        rows: [
-            { title: 'Title 1', status: 'Status 1', notes: 'Notes 1' },
-            { title: 'Title 2', status: 'Status 2', notes: 'Notes 2' },
-            { title: 'Title 2', status: 'Status 2', notes: 'Notes 2' },
-            { title: 'Title 2', status: 'Status 2', notes: 'Notes 2' },
-            { title: 'Title 2', status: 'Status 2', notes: 'Notes 2' },
-            // Add more rows as needed
-        ],
-        images: [
-            { fieldname: 'Image 2', path: 'http://localhost:3000/male.png' },
-            { fieldname: 'Image 1', path: 'http://localhost:3000/male.png' },
-            { fieldname: 'Image 2', path: 'http://localhost:3000/male.png' },
-            { fieldname: 'Image 1', path: 'http://localhost:3000/male.png' },
-            { fieldname: 'Image 2', path: 'http://localhost:3000/male.png' },
-            { fieldname: 'Image 1', path: 'http://localhost:3000/male.png' },
-            // Add more images as needed
-        ],
+    const template_data = {
+        location: information.locations,
+        car: information.boardNumber + "  " + information.privateNumber,
+        shift: information.day + " - " + information.period,
+        violations: information.trafficViolations,
+        date: information.date,
+        user: user.name + ' - ' + user.accountId,
+        rows: [...groupedData['First'],...groupedData['Second']].map(e => {
+            return {
+                title: e.title,
+                status: e.value != 'Nei' ? 'Ja' : 'Nei',
+                notes: e.value != "Nei" ? (e.hasRequiredDescription ? e.value : 'XXX') : 'XXX'
+            };
+        }),
+        images: req.files.map(file =>{
+            console.log(`${file.fieldname} - ${process.env.BASE_URL + file.path.split('public')[1].replaceAll('\\','/')}`)
+
+            return {
+                fieldname: file.fieldname,
+                path: process.env.BASE_URL + file.path.split('public')[1].replaceAll('\\','/')
+            }
+        }),
     };
-    const filledTemplate = Handlebars.compile(htmlTemplate)(data);
+    const filledTemplate = Handlebars.compile(htmlTemplate)(template_data);
+
+    let filename = `driver_${Date.now()}.pdf`
 
     // Generate PDF from filled template
     await page.setContent(filledTemplate);
-    await page.pdf({ path: './public/pdfs/output.pdf', format: 'A4' });
+    await page.pdf({ path: `./public/profiles/${filename}`, format: 'A4' });
+
+    let pdf = new PDF({
+        name: filename,
+        link: process.env.BASE_URL + 'profiles/' + filename,
+        userId: decodedToken.userId
+    })
+
+    await pdf.save()
+    console.log(`PDF saved: ${process.env.BASE_URL + 'profiles/' + filename}`);
+
 
     await browser.close();
+    res.status(200).json({ message: 'PDF generated and saved successfully' });
 }
 
 const getAllDrivers = async (req,res) =>{
