@@ -36,15 +36,23 @@ app.post('/api/login', async (req,res) =>{
     }
 })
 app.use((req,res,next) =>{
-    if(req.url.includes('/api/')){
+    if(
+        req.url.includes('/api/')
+        || req.url.includes('/images/')
+        || req.url.includes('/profiles/')
+        || req.url.includes('/css/')
+    ){
+        console.log('yes')
       return next()
+    }else{
+        console.log('no')
+        if(req.cookies.isLogged == "true" && (req.url != "/login" ) ){
+            next();
+        }else{
+            return res.redirect('/login')
+        }
     }
 
-    if(req.cookies.isLogged == "true" && (req.url != "/login" ) ){
-        next();
-    }else{
-        return res.redirect('/login')
-    }
 })
 
 const driverRouter = require('./routes/driverRoute')

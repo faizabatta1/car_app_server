@@ -186,6 +186,7 @@ const createNewDriver = async (req,res) =>{
         // Load the HTML template
         const htmlTemplate = fs.readFileSync('templates/driver.html', 'utf8');
         let decodedToken = jwt.verify(token,'your-secret-key')
+        console.log(decodedToken)
         let user = await User.findOne({ _id: decodedToken.userId })
 
         // Replace placeholders with dynamic data
@@ -233,7 +234,8 @@ const createNewDriver = async (req,res) =>{
         await browser.close();
         res.status(200).json({ message: 'PDF generated and saved successfully' });
     }catch (error){
-        req.status(500).send(error.message)
+        console.log(error.message)
+        res.status(500).send(error.message)
     }
 }
 
