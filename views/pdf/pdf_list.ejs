@@ -46,8 +46,8 @@
     <div class="form-group">
         <input type="text" class="form-control" id="searchInput" placeholder="Search by Date, Name, User, ID, or Link">
     </div>
-    <div class="table-responsive custom-pdf-table">
-        <table class="table table-bordered">
+    <div class="table-responsive text-center">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
                 <th>Dato</th>
@@ -59,18 +59,24 @@
             </tr>
             </thead>
             <tbody>
-            <% pdfs.forEach(pdf => { %>
+            <%if(pdfs.length == 0){%>
                 <tr>
-                    <td><%= new Date(+pdf.createdAt).toLocaleDateString() %></td>
-                    <td><%= pdf.name %></td>
-                    <td><%= pdf.userId?.name ?? 'Removed'  %></td>
-                    <td><%= pdf.userId?.accountId ?? "Unknown"  %></td>
-                    <td><a href="/pdfs/<%= pdf._id %>">Se PDF</a></td>
-                    <td class="d-flex custom-pdf-controls">
-                        <button class="btn btn-danger btn-sm w-100" onclick="deletePdf('<%= pdf._id %>')">Slett</button>
-                    </td>
+                    <td colspan="6">No Pdfs Yet</td>
                 </tr>
-            <% }); %>
+            <%} else{%>
+                <% pdfs.forEach(pdf => { %>
+                    <tr>
+                        <td><%= new Date(+pdf.createdAt).toLocaleDateString() %></td>
+                        <td><%= pdf.name %></td>
+                        <td><%= pdf.userId?.name ?? 'Removed'  %></td>
+                        <td><%= pdf.userId?.accountId ?? "Unknown"  %></td>
+                        <td><a href="/pdfs/<%= pdf._id %>">Se PDF</a></td>
+                        <td class="d-flex custom-pdf-controls">
+                            <button class="btn btn-danger btn-sm w-100" onclick="deletePdf('<%= pdf._id %>')">Slett</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <%}%>
             </tbody>
         </table>
     </div>

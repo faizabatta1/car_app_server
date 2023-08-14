@@ -42,17 +42,17 @@
         <div class="col-md-6">
             <div class="login-container">
                 <h1 class="text-center">AdminPanel</h1>
-                <form action="/api/login" method="POST">
+                <form id="loginForm">
                     <div class="form-group">
-                        <label for="username">Brukenavn:</label>
+                        <label for="username">username</label>
                         <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Passord:</label>
+                        <label for="password">password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Logg Inn</button>
+                        <button type="submit" class="btn btn-primary">login</button>
                     </div>
                 </form>
             </div>
@@ -60,4 +60,30 @@
     </div>
 </div>
 </body>
+
+<script>
+    onload = () =>{
+        let form = document.querySelector('#loginForm')
+        form.addEventListener('submit',async (e) =>{
+            e.preventDefault()
+
+            let username = document.querySelector('#username')
+            let password = document.querySelector('#password')
+
+            let response = await fetch('/api/login',{
+                method:'POST',headers:{'Content-Type':'application/json'}, body : JSON.stringify({
+                    'username':username.value,
+                    'password':password.value
+                })
+            })
+
+            if(response.status == 200){
+                location.href = '/'
+            }
+            else{
+                alert("Failed To Login")
+            }
+        })
+    }
+</script>
 </html>

@@ -24,6 +24,10 @@ const FormFieldSchema = new mongoose.Schema({
     requiredDescription:{
         type:String,
         default: ""
+    },
+    whenToGetDescription:{
+        type: Boolean,
+        default: true
     }
 })
 

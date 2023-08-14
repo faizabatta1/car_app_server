@@ -28,9 +28,28 @@
             <a class="btn btn-secondary" href="/users">Avbrytt</a>
         </div>
     </form>
+
+    <div id="output"></div>
 </div>
 
+
+
 <script>
+    function showAlert(message, alertType) {
+        const alertContainer = document.createElement('div');
+        alertContainer.className = `alert alert-${alertType} mt-4`;
+        alertContainer.textContent = message;
+
+        const container = document.querySelector('#output');
+        container.appendChild(alertContainer);
+
+        // Remove the alert after a few seconds
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 5000);
+    }
+
+
     function updateUser() {
         const name = document.getElementById("name");
         const accountId = document.getElementById("accountId");
@@ -50,18 +69,19 @@
             }
         })
             .then(response => {
-                if (response.status == 200) {
-                    // Handle success
-                    alert("User updated successfully!");
-                    location.href = '/users'
+                if (response.status === 200) {
+                    // Reload the page after successful deletion
+                    showAlert("User Was Updated","info")
+                    setTimeout(() =>{
+                        location.href = '/users'
+                    },3000)
                 } else {
-                    // Handle error
-                    alert("Failed to update user.");
+                    showAlert("Failed To Update User","danger")
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert("An error occurred while updating user.");
+                showAlert("An error occurred while updating user.",'danger')
             });
     }
 </script>

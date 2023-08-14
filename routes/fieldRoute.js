@@ -52,7 +52,7 @@ router.get('/formFields/:id', async (req, res) => {
 router.put('/formFields/:id', async (req, res) => {
     try {
         console.log(req.body)
-        const formField = await FormField.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const formField = await FormField.findByIdAndUpdate(req.params.id, req.body, { $new: true });
         return res.status(200).json(formField);
     } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });

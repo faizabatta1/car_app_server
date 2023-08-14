@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label for="answerDataType">Answer Data Type</label>
-            <select class="form-control" id="answerDataType" name="answerDataType" required>
+            <select class="form-control" id="answerDataType" name="answerDataType" required onchange="toggleAdditionalFields()">
                 <option value="text">Text</option>
                 <option value="number">Nummer</option>
                 <option value="yes_no">Ja-Nei</option>
@@ -40,21 +40,74 @@
                 <option value="dagensskjema">Second</option>
             </select>
         </div>
-        <div class="form-group form-check">
+
+        <!-- Display these fields only for "Ja-Nei" question type -->
+        <div class="form-group form-check" style="display: none;" id="requiredDescriptionGroup">
             <input type="checkbox" class="form-check-input" id="hasRequiredDescription" onchange="toggleRequiredDescription()" name="hasRequiredDescription">
             <label class="form-check-label" for="hasRequiredDescription">Har nødvendig beskrivelse?</label>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: none;" id="requiredDescriptionField">
             <label for="requiredDescription">Nødvendig beskrivelse</label>
             <input type="text" class="form-control" id="requiredDescription" name="requiredDescription" disabled>
         </div>
+        <div class="form-group" style="display: none;" id="positiveGroup">
+            <label for="positive">Choose when to get description</label>
+            <select name="positive" class="form-control" id="positive" disabled>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
         <script>
             // Function to enable/disable the required description based on checkbox state
             function toggleRequiredDescription() {
                 const requiredDescriptionInput = document.getElementById("requiredDescription");
+                const positive = document.getElementById("positive");
                 const checkbox = document.getElementById("hasRequiredDescription");
                 requiredDescriptionInput.disabled = !checkbox.checked;
+                positive.disabled = !checkbox.checked;
             }
+
+            // Function to show an alert message
+            function showAlert(type, message) {
+                const successAlert = document.getElementById("successAlert");
+                const failureAlert = document.getElementById("failureAlert");
+
+                if (type === "success") {
+                    successAlert.textContent = message;
+                    successAlert.style.display = "block";
+                    failureAlert.style.display = "none";
+                } else if (type === "danger") {
+                    failureAlert.textContent = message;
+                    failureAlert.style.display = "block";
+                    successAlert.style.display = "none";
+                }
+
+                // Remove the alert after 5 seconds
+                setTimeout(() => {
+                    successAlert.style.display = "none";
+                    failureAlert.style.display = "none";
+                }, 3000);
+            }
+
+            // Function to show/hide additional fields for "Ja-Nei" question type
+            function toggleAdditionalFields() {
+                const answerDataType = document.getElementById("answerDataType");
+                const requiredDescriptionGroup = document.getElementById("requiredDescriptionGroup");
+                const requiredDescriptionField = document.getElementById("requiredDescriptionField");
+                const positiveGroup = document.getElementById("positiveGroup");
+
+                if (answerDataType.value === "yes_no") {
+                    requiredDescriptionGroup.style.display = "block";
+                    requiredDescriptionField.style.display = "block";
+                    positiveGroup.style.display = "block";
+                } else {
+                    requiredDescriptionGroup.style.display = "none";
+                    requiredDescriptionField.style.display = "none";
+                    positiveGroup.style.display = "none";
+                }
+            }
+
 
             // Function to handle form submission using Fetch API
             document.getElementById("createForm").addEventListener("submit", async function (event) {
@@ -65,6 +118,7 @@
                 let form = document.querySelector('#form')
                 let hasRequiredDescription = document.querySelector('#hasRequiredDescription')
                 let requiredDescription = document.querySelector('#requiredDescription')
+                let whenToGetDescription = document.querySelector('#positive')
 
                 const formData = new FormData(event.target);
                 console.log(formData)
@@ -77,27 +131,43 @@
                             form: form.value,
                             hasRequiredDescription: hasRequiredDescription.checked,
                             requiredDescription: hasRequiredDescription.checked ? requiredDescription.value : undefined,
-                            answerDataType: answerDataType.value
+                            answerDataType: answerDataType.value,
+                            whenToGetDescription: whenToGetDescription.value == 'yes'
                         }),
                         headers: {
                             'Content-Type': 'application/json; charset=utf-8'
                         }
-                    })
+                    });
 
-                    if(response.status != 200){
-                        alert("Failed To Create Field")
+                    if (response.status === 200) {
+                        // Show success alert and navigate back after 3 seconds
+                        showAlert('success', 'Field Created successfully.');
+                        setTimeout(() => {
+                            location.href = '/fields';
+                        }, 3000);
+                    } else {
+                        // Show failure alert
+                        showAlert('danger', 'Failed To Create Field');
                     }
-
-                    location.href = '/fields'
-
-
                 } catch (error) {
-                    console.log('erorr')
+                    console.error('Error occurred:', error);
+                    // Show failure alert
+                    showAlert('danger', 'An error occurred. Please try again.');
                 }
             });
         </script>
-        <button type="submit" class="btn btn-primary w-100">Legge til</button>
+        <div class="d-flex justify-content-center align-items-center">
+            <button type="submit" class="btn btn-primary pl-3 pr-3 mr-3">Legge til</button>
+            <a href="/fields" class="btn btn-secondary pl-3 pr-3">Cancel</a>
+        </div>
     </form>
+
+    <div class="alert alert-success mt-3" id="successAlert" style="display: none;">
+        Field Created successfully.
+    </div>
+    <div class="alert alert-danger mt-3" id="failureAlert" style="display: none;">
+        Failed To Create Field. Please try again.
+    </div>
 </div>
 </body>
 </html>

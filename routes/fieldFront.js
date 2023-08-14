@@ -26,8 +26,10 @@ router.get('/fields/create',async (req,res) =>{
 router.get('/fields/:id/update', async (req,res) => {
     try{
         let formField = await FormField.findOne({_id:req.params.id})
+        let groups = await Group.find({})
         return res.status(200).render('fields/edit',{
-            formField
+            formField,
+            groups
         })
     }catch (error){
         return res.status(500).send(error.message)
