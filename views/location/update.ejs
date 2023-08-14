@@ -60,7 +60,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    function updateLocation() {
+    async function updateLocation() {
         const locationId = '<%= location._id %>';
         const location = document.querySelector('#location');
 
@@ -72,30 +72,35 @@
             }
         });
 
-        fetch(`/api/locations/${locationId}`, {
+        const shifts = document.querySelectorAll('input[name="shifts[]"]');
+
+        const selectedShifts = [];
+        shifts.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedShifts.push(checkbox.value);
+            }
+        });
+
+        let response = await fetch(`/api/locations/${locationId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 location: location.value,
-                days: selectedDays
+                days: selectedDays,
+                shifts: selectedShifts
             })
         })
-            .then(response => {
-                if (response.status === 200) {
-                    document.getElementById('successAlert').style.display = 'block';
-                    setTimeout(() => {
-                        window.location.href = '/locations'; // Redirect to the location list page
-                    }, 3000);
-                } else {
-                    document.getElementById('failureAlert').style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('failureAlert').style.display = 'block';
-            });
+
+        if (response.status === 200) {
+            document.getElementById('successAlert').style.display = 'block';
+            setTimeout(() => {
+                window.location.href = '/locations'; // Redirect to the location list page
+            }, 3000);
+        } else {
+            document.getElementById('failureAlert').style.display = 'block';
+        }
     }
 </script>
 </body>
