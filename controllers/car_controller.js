@@ -3,12 +3,14 @@ const Car = require('../models/Car')
 
 const createNewCar = async (req,res) =>{
     try{
+        console.log(req.body)
         const { boardNumber, privateNumber } = req.body
         const car = new Car({ boardNumber, privateNumber })
         await car.save()
 
         return res.status(200).send("Car Was Created")
     }catch (error){
+        console.log(error.message)
         return res.status(500).send(error.message)
     }
 }

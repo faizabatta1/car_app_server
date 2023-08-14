@@ -14,16 +14,44 @@
     <h1 class="text-center">Rediger rute</h1>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form id="editLocationForm">
+            <form id="editLocationForm" style="height: 500px;">
                 <div class="form-group">
                     <label for="location">Rute</label>
                     <input type="text" class="form-control" id="location" name="location" value="<%= location.location %>" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="form-group">
+                        <label>Velg dager</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="saturday"> Lørdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="sunday"> Søndag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="monday"> Mandag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="tuesday"> Tirsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="wednesday"> Onsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="thursday"> Torsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="friday"> Fredag</label> <!-- Added missing Friday checkbox -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Velg Shift</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="day"> Dag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="night"> Natt</label>
+                            <label class="checkbox-label"><input type="checkbox" name="shifts[]" value="weekend"> Helg</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-center">
                     <button type="button" class="btn btn-primary" onclick="updateLocation()">lagre</button>
                     <a href="/locations" class="btn btn-secondary">Avbrytt</a>
                 </div>
             </form>
+            <div id="successAlert" class="alert alert-success mt-3" style="display: none;">
+                Lokasjonen er oppdatert vellykket.
+            </div>
+            <div id="failureAlert" class="alert alert-danger mt-3" style="display: none;">
+                Kunne ikke oppdatere lokasjonen. Vær så snill, prøv på nytt.
+            </div>
         </div>
     </div>
 </div>
@@ -34,7 +62,15 @@
 <script>
     function updateLocation() {
         const locationId = '<%= location._id %>';
-        let location = document.querySelector('#location')
+        const location = document.querySelector('#location');
+
+        const days = document.querySelectorAll('input[name="days[]"]');
+        const selectedDays = [];
+        days.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedDays.push(checkbox.value);
+            }
+        });
 
         fetch(`/api/locations/${locationId}`, {
             method: 'PUT',
@@ -42,20 +78,23 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                location: location.value
+                location: location.value,
+                days: selectedDays
             })
         })
             .then(response => {
-                if (response.status == 200) {
-                    alert('Location details updated successfully.');
-                    window.location.href = '/locations'; // Redirect to the location list page
+                if (response.status === 200) {
+                    document.getElementById('successAlert').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/locations'; // Redirect to the location list page
+                    }, 3000);
                 } else {
-                    alert('Failed to update location details. Please try again.');
+                    document.getElementById('failureAlert').style.display = 'block';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while updating location details. Please try again.');
+                document.getElementById('failureAlert').style.display = 'block';
             });
     }
 </script>

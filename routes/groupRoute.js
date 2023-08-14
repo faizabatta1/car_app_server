@@ -19,6 +19,7 @@ router.post('/groups', async (req,res) =>{
         await group.save()
         return res.status(200).json(group)
     }catch (error){
+        console.log(error.message)
         return res.status(500).send("Internal Server Error")
     }
 })
@@ -26,6 +27,7 @@ router.post('/groups', async (req,res) =>{
 
 router.delete('/groups/:id', async (req,res) =>{
     try{
+        console.log(req.params)
         await Group.findOneAndDelete({ _id: req.params.id })
         return res.status(200).send("Deleted")
     }catch (error){
@@ -36,9 +38,13 @@ router.delete('/groups/:id', async (req,res) =>{
 router.put('/groups/:id', async (req,res) =>{
     try{
         const { name, notice, text } = req.body
-        await Group.findOneAndUpdate({ _id: req.params.id },{
+        console.log(req.params)
+        console.log(req.body)
+        let updated = await Group.findOneAndUpdate({ _id: req.params.id },{
             name, notice, text
         },{ $new: true })
+        if(updated) console.log('yes updated')
+        else console.log('not updated')
 
         return res.status(200).send("Updated")
     }catch (error){

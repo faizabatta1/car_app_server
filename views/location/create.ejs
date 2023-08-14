@@ -45,6 +45,7 @@
                             <label class="checkbox-label"><input type="checkbox" name="days[]" value="tuesday"> Tirsdag</label>
                             <label class="checkbox-label"><input type="checkbox" name="days[]" value="wednesday"> Onsdag</label>
                             <label class="checkbox-label"><input type="checkbox" name="days[]" value="thursday"> Torsdag</label>
+                            <label class="checkbox-label"><input type="checkbox" name="days[]" value="friday"> Fredag</label> <!-- Added missing Friday checkbox -->
                         </div>
                     </div>
                     <div class="form-group">
@@ -58,10 +59,19 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" onclick="createLocation()">Legg til plassering</button>
+                    <button type="submit" class="btn btn-primary">Legg til plassering</button>
                     <a href="/locations" class="btn btn-secondary">Avbrytt</a>
                 </div>
             </form>
+            <div id="successAlert" class="alert alert-success mt-3" style="display: none;">
+                Plasseringen ble lagt til vellykket.
+            </div>
+            <div id="failureAlert" class="alert alert-danger mt-3" style="display: none;">
+                Kunne ikke legge til plasseringen. Vær så snill, prøv på nytt.
+            </div>
+            <div id="infoAlert" class="alert alert-info mt-3" style="display: none;">
+                Vennligst velg minst én dag og én periode.
+            </div>
         </div>
     </div>
 </div>
@@ -70,7 +80,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    function createLocation() {
+    let form = document.getElementById('newLocationForm')
+    form.addEventListener('submit',async function createLocation(e) {
+        e.preventDefault()
+
         const shifts = document.querySelectorAll('input[name="shifts[]"]');
         const days = document.querySelectorAll('input[name="days[]"]');
 
@@ -88,9 +101,14 @@
             }
         });
 
+        if (selectedDays.length === 0 || selectedShifts.length === 0) {
+            document.getElementById('infoAlert').style.display = 'block';
+            return;
+        }else{
+            document.getElementById('infoAlert').style.display = 'none'
+        }
 
-
-        const location = document.querySelector('#location')
+        const location = document.querySelector('#location');
         fetch('/api/locations', {
             method: 'POST',
             headers: {
@@ -103,18 +121,20 @@
             })
         })
             .then(response => {
-                if (response.status == 200) {
-                    alert('Location added successfully.');
-                    window.location.href = '/locations'; // Redirect to the location list page
+                if (response.status === 200) {
+                    document.getElementById('successAlert').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/locations'; // Redirect to the location list page
+                    }, 3000);
                 } else {
-                    alert('Failed to add location. Please try again.');
+                    document.getElementById('failureAlert').style.display = 'block';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while adding the location. Please try again.');
+                document.getElementById('failureAlert').style.display = 'block';
             });
-    }
+    })
 </script>
 </body>
 </html>

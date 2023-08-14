@@ -11,16 +11,16 @@
 <%- include('../components/navbar') %>
 <div class="container mt-5">
     <h1 class="text-center">Legg ny bil</h1>
+    <div id="infoBox" class="alert" role="alert" style="display: none;"></div>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form id="createCarForm">
                 <div class="mb-3">
-                    <label for="boardNumber" class="form-label">Regnr.</label>
-                    <input type="text" class="form-control" id="boardNumber" name="boardNumber" required>
+                    <input type="text" class="form-control" id="boardNumber" name="boardNumber" placeholder="Regnr." required>
                 </div>
                 <div class="mb-3">
-                    <label for="privateNumber" class="form-label">Tjenstebilnr.</label>
-                    <input type="text" class="form-control" id="privateNumber" name="privateNumber" required>
+                    <label for="privateNumber" class="form-label"></label>
+                    <input type="text" class="form-control" id="privateNumber" name="privateNumber" placeholder="Tjenstebilnr." required>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-primary me-3" onclick="submitForm()">legge til</button>
@@ -29,7 +29,6 @@
                     <a href="/cars" class="btn btn-secondary">Avbryt</a>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -37,37 +36,51 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/js/bootstrap.min.js"></script>
 <script>
-  function submitForm() {
-    const boardNumber = document.getElementById('boardNumber').value;
-    const privateNumber = document.getElementById('privateNumber').value;
+    async function submitForm() {
+        const boardNumber = document.getElementById('boardNumber').value;
+        const privateNumber = document.getElementById('privateNumber').value;
 
-    const formData = {
-      boardNumber: boardNumber,
-      privateNumber: privateNumber
-    };
+        const formData = {
+            boardNumber: boardNumber,
+            privateNumber: privateNumber
+        };
 
-    fetch('/api/cars', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-      .then(response => {
-        if (response.ok) {
-          // Car created successfully, you can redirect to another page or display a success message
-          alert('Bil opprettet vellykket!');
-          window.location.href = '/cars'; // Redirect to the car list page
+        let response = await fetch('/api/cars', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+
+        if (response.status == 200) {
+            // Car created successfully, show success message and navigate back after 3 seconds
+            showInfoBox('Bil opprettet vellykket!', 'success', true);
+            setTimeout(() => {
+                window.location.href = '/cars'; // Redirect to the car list page
+            }, 3000);
         } else {
-          // Handle the error response if needed
-          alert('Kunne ikke opprette bilen. Vær så snill, prøv på nytt.');
+            // Handle the failure case
+            showInfoBox('Kunne ikke opprette bilen. Vær så snill, prøv på nytt.', 'danger', false);
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Æsjj! feil oppsto. Prøv igjen senere.');
-      });
-  }
+
+    }
+
+    function showInfoBox(message, type, autoHide) {
+        const infoBox = document.getElementById('infoBox');
+        infoBox.innerHTML = message;
+        infoBox.classList.add(`alert-${type}`);
+        infoBox.style.display = 'block';
+
+        if (autoHide) {
+            setTimeout(() => {
+                infoBox.style.display = 'none';
+                infoBox.innerHTML = '';
+                infoBox.classList.remove(`alert-${type}`);
+            }, 3000);
+        }
+    }
 </script>
+
 </body>
 </html>

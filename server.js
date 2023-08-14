@@ -42,10 +42,8 @@ app.use((req,res,next) =>{
         || req.url.includes('/profiles/')
         || req.url.includes('/css/')
     ){
-        console.log('yes')
       return next()
     }else{
-        console.log('no')
         if(req.cookies.isLogged == "true" && (req.url != "/login" ) ){
             next();
         }else{

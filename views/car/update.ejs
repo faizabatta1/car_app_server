@@ -10,18 +10,25 @@
 <body>
 <%- include('../components/navbar') %>
 
+<div id="successAlert" class="alert alert-success mt-3 container" style="display: none;">
+    Bildetaljene er oppdatert.
+</div>
+<div id="failureAlert" class="alert alert-danger mt-3 container" style="display: none;">
+    Kunne ikke oppdatere bildetaljene. Vær så snill, prøv på nytt.
+</div>
+
 <div class="container mt-5">
     <h1 class="text-center">Rediger bil</h1>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form id="editCarForm">
                 <div class="form-group">
-                    <label for="boardNumber">Regnr.</label>
-                    <input type="text" class="form-control" id="boardNumber" name="boardNumber" value="<%= car.boardNumber %>" required>
+                    <label for="boardNumber">Board Number</label>
+                    <input type="text" class="form-control" id="boardNumber" name="boardNumber" value="<%= car.boardNumber %>" required >
                 </div>
                 <div class="form-group">
-                    <label for="privateNumber">Tjenstebilnr.</label>
-                    <input type="text" class="form-control" id="privateNumber" name="privateNumber" value="<%= car.privateNumber %>" required>
+                    <label for="privateNumber">Private Number</label>
+                    <input type="text" class="form-control" id="privateNumber" name="privateNumber" value="<%= car.privateNumber %>" required >
                 </div>
                 <div class="text-center">
                     <button type="button" class="btn btn-primary" onclick="updateCar()">Lagre</button>
@@ -50,15 +57,17 @@
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Bildetaljene er oppdatert.');
-                    window.location.href = '/cars'; // Redirect to the car list page
+                    document.getElementById('successAlert').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/cars'; // Redirect to the car list page
+                    }, 3000);
                 } else {
-                    alert('Kunne ikke oppdatere bildetaljene. Vær så snill, prøv på nytt.');
+                    document.getElementById('failureAlert').style.display = 'block';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Det oppstod en feil under oppdatering av bildetaljer. Vær så snill, prøv på nytt.');
+                document.getElementById('failureAlert').style.display = 'block';
             });
     }
 </script>
