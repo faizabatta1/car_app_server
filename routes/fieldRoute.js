@@ -70,8 +70,10 @@ router.delete('/formFields/:id', async (req, res) => {
 
 router.get('/formFields/form/:formName', async (req,res) =>{
     try{
-        console.log(req.params)
         const formName = req.params.formName
+        console.log(formName)
+        let add = await FormField.find({})
+        console.log(add)
         const formFields = await FormField.find({ form: formName }).populate({
             path:'group',
             ref:'Group'
