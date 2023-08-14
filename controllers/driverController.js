@@ -179,7 +179,8 @@ const createNewDriver = async (req,res) =>{
 
 
         const browser = await puppeteer.launch({
-            headless: 'new'
+            headless: 'new',
+            args:['--no-sandbox']
         });
         const page = await browser.newPage();
 
