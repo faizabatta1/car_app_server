@@ -22,6 +22,15 @@ app.get('/login', (req,res) =>{
     return res.status(200).render('auth/login')
 })
 
+app.get('/api/logout',(req,res) =>{
+
+    res.cookie('isLogged',{
+        expires: Date.now()
+    })
+
+    return res.redirect('/')
+})
+
 app.post('/api/login', async (req,res) =>{
     const { username, password } = req.body
     if(username == "admin" && password == "Admin"){
