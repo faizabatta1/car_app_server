@@ -20,7 +20,7 @@ router.post('/groups', async (req,res) =>{
         return res.status(200).json(group)
     }catch (error){
         console.log(error.message)
-        return res.status(500).send("Internal Server Error")
+        return res.status(500).send(error.message)
     }
 })
 
@@ -28,10 +28,19 @@ router.post('/groups', async (req,res) =>{
 router.delete('/groups/:id', async (req,res) =>{
     try{
         console.log(req.params)
-        await Group.findOneAndDelete({ _id: req.params.id })
+        await Group.deleteOne({ _id: req.params.id })
         return res.status(200).send("Deleted")
     }catch (error){
-        return res.status(500).send("Internal Server Eror")
+        return res.status(500).send(error.message)
+    }
+})
+
+router.delete('/groups', async (req,res) =>{
+    try{
+        await Group.deleteMany({})
+        return res.status(200).send("All Groups Were Deleted")
+    }catch (error){
+        return res.status(500).send(error.message)
     }
 })
 
@@ -48,7 +57,7 @@ router.put('/groups/:id', async (req,res) =>{
 
         return res.status(200).send("Updated")
     }catch (error){
-        return res.status(500).send("Internal Server Error")
+        return res.status(500).send(error.message)
     }
 })
 

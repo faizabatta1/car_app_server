@@ -17,15 +17,10 @@
         header {
             background-color: #007bff;
             color: white;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
 
         .welcome-message {
             font-size: 24px;
@@ -110,9 +105,7 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>Hei på ditt Admin</h1>
-</header>
+<%- include('./components/navbar') %>>
 <div class="container">
     <div class="welcome-message">Hei, Admin!</div>
 
@@ -150,5 +143,7 @@
         <!-- Add more quick links as needed -->
     </div>
 </div>
+<script src="https://kit.fontawesome.com/7d365a7c21.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

@@ -43,9 +43,19 @@ const updateCar = async (req,res) =>{
 const deleteCar = async (req,res) =>{
     try{
         const { id } = req.params
-        await Car.findOneAndDelete({ _id: id })
+        await Car.deleteOne({ _id: id })
 
         return res.status(200).send("Car Was Deleted")
+    }catch (error){
+        return res.status(500).json(error.message)
+    }
+}
+
+const deleteAllCars = async (req,res) =>{
+    try{
+        await Car.deleteMany({})
+
+        return res.status(200).send("All Cars Were Deleted")
     }catch (error){
         return res.status(500).json(error.message)
     }
@@ -55,5 +65,6 @@ module.exports = {
     createNewCar,
     getAllCars,
     updateCar,
-    deleteCar
+    deleteCar,
+    deleteAllCars
 }

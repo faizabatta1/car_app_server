@@ -55,23 +55,23 @@ router.put('/formFields/:id', async (req, res) => {
         const formField = await FormField.findByIdAndUpdate(req.params.id, req.body, { $new: true });
         return res.status(200).json(formField);
     } catch (error) {
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: error.message });
     }
 });
 
 router.delete('/formFields/:id', async (req, res) => {
     try {
-        await FormField.findByIdAndDelete(req.params.id);
+        await FormField.deleteOne({_id: req.params.id});
         return res.status(200).json({ message: 'FormField deleted successfully' });
     } catch (error) {
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: error.message });
     }
 });
 
 router.get('/formFields/form/:formName', async (req,res) =>{
     try{
-        const formName = req.params.formName
-        console.log(formName)
+        const {formName} = req.params
+
         let add = await FormField.find({})
         console.log(add)
         const formFields = await FormField.find({ form: formName }).populate({
@@ -84,4 +84,13 @@ router.get('/formFields/form/:formName', async (req,res) =>{
         return res.status(500).send(error.message)
     }
 })
+
+router.delete('/formFields', async (req, res) => {
+    try {
+        await FormField.deleteMany({})
+        return res.status(200).json({ message: 'FormField deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
 module.exports = router;

@@ -25,7 +25,8 @@
 <%- include('../components/navbar') %>
 <div class="container">
     <div class="d-flex justify-content-end mb-4">
-        <a href="/users/create" class="btn btn-info"> Lage ny bruker</a>
+        <a href="/users/create" class="btn btn-info mr-3"> Lage ny bruker</a>
+        <button class="btn btn-danger" onclick="showDeleteAllConfirmation()">delete all users</button>
     </div>
     <div id="output"></div>
     <div class="form-group">
@@ -76,9 +77,33 @@
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="deleteAllConfirmationModal" tabindex="-1" aria-labelledby="deleteAllConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAllConfirmationModalLabel">Bekreft sletting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all users?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                <button id="confirmDeleteButton" type="button" data-dismiss="modal" class="btn btn-danger" onclick="deleteAllUsers()">Slett</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function showDeleteConfirmation(userId) {
         $('#deleteConfirmationModal').modal('show');
+    }
+
+    function showDeleteAllConfirmation(userId) {
+        $('#deleteAllConfirmationModal').modal('show');
     }
 
     function showAlert(message, alertType) {
@@ -95,6 +120,31 @@
         }, 5000);
     }
 
+    async function deleteAllUsers(){
+        try {
+            const response = await fetch(`/api/users`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+            });
+
+            console.log(response.status)
+
+            if (response.status === 200) {
+                // Reload the page after successful deletion
+                showAlert("All Users Were Deleted","success")
+                setTimeout(() =>{
+                    location.reload();
+                },3000)
+            } else {
+                showAlert("Failed To Delete All Users","danger")
+            }
+        } catch (error) {
+            console.error('Error deleting all users:', error);
+            showAlert("An error occurred while deleting all users. Please try again.","danger")
+        }
+    }
 
     async function deleteUser(userId) {
         try {

@@ -18,10 +18,11 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col">
-            <h1>Gruppeliste</h1>
+            <h2>Gruppeliste</h2>
         </div>
         <div class="col text-right">
-            <a href="/groups/create" class="btn btn-primary">Opprett ny gruppe</a>
+            <a href="/groups/create" class="btn btn-info btn-sm">Opprett ny gruppe</a>
+            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAllModal">delete all groups</button>
         </div>
     </div>
     <br>
@@ -50,8 +51,8 @@
                             <td><%= group.notice %></td>
                             <td><%= group.text %></td>
                             <td class="controls">
-                                <a href="/groups/<%= group._id %>/edit" class="btn font-weight-bolder btn-primary btn-sm mr-2">Redigere</a>
-                                <button type="button" class="btn btn-danger btn-sm font-weight-bolder" data-toggle="modal" data-target="#deleteModal<%= group._id %>">Slett</button>
+                                <a href="/groups/<%= group._id %>/edit" class="btn  btn-primary btn-sm mr-2">Redigere</a>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal<%= group._id %>">Slett</button>
 
 
                             </td>
@@ -72,6 +73,27 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
                                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteGroup('<%= group._id %>')">Slett</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteAllModal" tabindex="-1" role="dialog" aria-labelledby="deleteAllModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteAllModalLabel">Bekreft Sletting</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete all groups?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteAllGroups()">Slett</button>
                                     </div>
                                 </div>
                             </div>
@@ -109,6 +131,31 @@
             showInfoBox(`En feil oppstod under sletting av gruppen. Prøv igjen.`, 'danger');
         }
     }
+    async function deleteAllGroups() {
+        try {
+            const response = await fetch(`/api/groups`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+            });
+
+            if (response.status == 200) {
+                // Show success message and reload after successful deletion
+                showInfoBox(`All Groups Were Deleted.`, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                // Show error message
+                showInfoBox(`Could not delete all groups. Please try again later.`, 'danger');
+            }
+        } catch (error) {
+            console.error('Error deleting group:', error);
+            showInfoBox(`An error occurred while deleting all groups. Try again later.`, 'danger');
+        }
+    }
+
 
     function showInfoBox(message, type) {
         const infoBox = document.getElementById('infoBox');

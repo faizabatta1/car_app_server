@@ -32,9 +32,19 @@ const updateLocation = async (req,res) =>{
 const deleteLocation = async (req,res) =>{
     try{
         const { id } = req.params
-        await Location.findOneAndDelete({ _id: id })
+        await Location.deleteOne({ _id: id })
 
         return res.status(200).send("Location Was Deleted")
+    }catch (error){
+        return res.status(500).send(error.message)
+    }
+}
+
+const deleteAllLocations = async (req,res) =>{
+    try{
+        await Location.deleteMany({})
+
+        return res.status(200).send("All Locations Were Deleted")
     }catch (error){
         return res.status(500).send(error.message)
     }
@@ -54,5 +64,6 @@ module.exports = {
     createLocation,
     updateLocation,
     deleteLocation,
-    getAllLocations
+    getAllLocations,
+    deleteAllLocations
 }

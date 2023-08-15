@@ -11,4 +11,13 @@ router.delete('/pdfs/:id', async (req,res) =>{
     }
 })
 
+router.delete('/pdfs',async (req,res) =>{
+    try{
+        await PDF.deleteMany({})
+        return res.status(200).send("All PDFS Were Deleted")
+    }catch (error){
+        return res.status(500).send(error.message)
+    }
+})
+
 module.exports = router
