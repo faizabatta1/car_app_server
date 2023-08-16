@@ -162,7 +162,7 @@ const createNewDriver = async (req,res) =>{
         console.log(req.headers)
         console.log(req.body)
         const { data, token } = req.headers
-        const information = JSON.parse(data)
+        const information = JSON.parse(decodeURIComponent(data))
 
         console.log(information)
 
