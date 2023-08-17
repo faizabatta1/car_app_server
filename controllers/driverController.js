@@ -207,10 +207,9 @@ const createNewDriver = async (req,res) =>{
                 };
             }),
             images: req.files.map(file =>{
-                console.log(`${file.fieldname} - ${process.env.BASE_URL + file.path.split('public')[1].replaceAll('\\','/')}`)
 
                 return {
-                    fieldname: file.fieldname,
+                    fieldname: decodeURIComponent(file.fieldname),
                     path: process.env.BASE_URL + file.path.split('public')[1].replaceAll('\\','/')
                 }
             }),
