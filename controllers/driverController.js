@@ -201,8 +201,9 @@ const createNewDriver = async (req,res) =>{
             rows: [...groupedData['First'],...groupedData['Second']].map(e => {
                 return {
                     title: e.title,
-                    status: e.value != 'Nei' ? 'Ja' : 'Nei',
-                    notes: e.value != "Nei" ? (e.hasRequiredDescription ? e.value : 'XXX') : 'XXX'
+                    status: e.value != (e.whenToGetDescription ? 'Ja' : 'Nei') ? 'Nei' : 'Ja',
+                    notes: e.value != 'Ja' || e.value != 'Nei' ? e.value : 'XXX',
+                    positive: e.value != 'Ja' || e.value != 'Nei'
                 };
             }),
             images: req.files.map(file =>{
