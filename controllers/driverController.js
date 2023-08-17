@@ -203,7 +203,7 @@ const createNewDriver = async (req,res) =>{
                     title: e.title,
                     status: e.value != (e.whenToGetDescription ? 'Ja' : 'Nei') ? 'Nei' : 'Ja',
                     notes: e.value != 'Ja' || e.value != 'Nei' ? e.value : 'XXX',
-                    positive: e.value != 'Ja' || e.value != 'Nei'
+                    positive: e.value != 'Ja' || e.value != 'Nei' ? 'red' : 'green'
                 };
             }),
             images: req.files.map(file =>{
