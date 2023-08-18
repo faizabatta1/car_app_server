@@ -146,7 +146,7 @@
         for (let i = 1; i < tableRows.length; i++) {
             const dateCell = tableRows[i].getElementsByTagName('td')[0]; // Adjust the index as per your table structure
 
-            if (dateCell && dateCell.innerText.includes(selectedDate)) {
+            if (dateCell && dateCell.innerText.includes(selectedDate.replaceAll('-','/'))) {
                 tableRows[i].style.display = '';
             } else {
                 tableRows[i].style.display = 'none';
