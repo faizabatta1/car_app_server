@@ -15,7 +15,7 @@ const PDFSchema = new mongoose.Schema({
     },
     createdAt: {
         type: String,
-        default: Date.now().toString()
+        default: new Date().toISOString().split('T')[0]
     },
 })
 
