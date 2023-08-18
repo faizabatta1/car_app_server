@@ -141,6 +141,7 @@
 
     datePicker.addEventListener('change', function () {
         const selectedDate = datePicker.value;
+        console.log(selectedDate)
 
         for (let i = 1; i < tableRows.length; i++) {
             const dateCell = tableRows[i].getElementsByTagName('td')[0]; // Adjust the index as per your table structure
