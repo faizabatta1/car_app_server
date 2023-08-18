@@ -39,21 +39,15 @@
             flex-grow: 1;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
 </head>
 <body>
 <%- include('../components/navbar') %>
 <div class="container custom-pdf-container">
-    <div class="form-group d-flex justify-content-between">
-        <input type="text" class="form-control mr-4" id="searchInput" placeholder="Search by Date, Name, User, ID, or Link">
-        <input type="text" class="form-control mr-4" id="datePicker" placeholder="Filter by Date">
-        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAllPdfModal" style="width: 150px;">delete all pdfs</button>
-    </div>
+
 
     <div class="form-group d-flex justify-content-between">
         <input type="text" class="form-control mr-4" id="searchInput" placeholder="Search by Date, Name, User, ID, or Link">
+        <input type="date" class="form-control mr-4" id="datePicker">
         <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAllPdfModal" style="width: 150px;" onclick="">delete all pdfs</button>
     </div>
     <div class="table-responsive text-center">
@@ -142,14 +136,6 @@
     </div>
 </div>
 <script>
-    $('#datePicker').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        clearBtn: true
-    });
-
-    // ... Your existing JavaScript code ...
-
     const datePicker = document.getElementById('datePicker');
     const tableRows = document.getElementsByTagName('tr');
 
@@ -166,6 +152,7 @@
             }
         }
     });
+
 
     const deletePdfModal = document.getElementById('deletePdfModal');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
