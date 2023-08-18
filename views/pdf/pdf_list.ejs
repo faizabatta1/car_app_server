@@ -42,6 +42,23 @@
         .container{
             width: 90% !important;
         }
+
+        /* Media query for screen width less than 980px */
+        @media (max-width: 980px) {
+            .form-group {
+                flex-direction: column;
+                align-items: stretch; /* Align items to stretch the full width */
+            }
+
+            .form-group input,
+            .form-group button {
+                margin-bottom: 10px;
+            }
+
+            .form-group button{
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body>
